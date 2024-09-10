@@ -1,0 +1,81 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+}
+
+apply from: 'version.gradle'
+
+group 'br.dev.rplus.cup'
+version loadVersion().getVersion()
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.17.2'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.17.2'
+    implementation 'org.json:json:20240303'
+
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+compileJava {
+    options.encoding = 'UTF-8'
+    options.compilerArgs << '-parameters'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+shadowJar {
+    archiveBaseName.set(rootProject.name)
+    archiveClassifier.set('all')
+    archiveVersion.set(version)
+
+    manifest {
+        attributes(
+                'Implementation-Title': 'Coffee Utilities Package',
+                'Implementation-Version': version,
+                'Built-By': System.getProperty('user.name'),
+                'Built-Date': new Date(),
+                'Built-JDK': System.getProperty('java.version'),
+                'Main-Class': 'br.dev.rplus.Main'
+        )
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+
+            artifacts.clear()
+
+            artifact(tasks.jar)
+
+            artifact(tasks.shadowJar) {
+                classifier = 'all'
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/${githubRepository}")
+            credentials {
+                username = 'rafandoo'
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+}

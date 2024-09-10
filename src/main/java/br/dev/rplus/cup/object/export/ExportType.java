@@ -1,5 +1,10 @@
-package br.dev.rplus.object.export;
+package br.dev.rplus.cup.object.export;
 
+/**
+ * Enum for export types (export strategies).
+ *
+ * @see ExportStrategy
+ */
 public enum ExportType {
 
     JSON(JsonExportStrategy.class),
