@@ -1,4 +1,4 @@
-<h1 style="text-align: center;">Coffee Utilities Package ☕</h1>
+<h1 align="center">Coffee Utilities Package ☕</h1>
 
 > Project Status: ⏳ In progress
 
@@ -6,18 +6,18 @@
 
 ## 📝 Project description 
 
-<p style="text-align: justify;">
+<p align="justify">
 Coffee Utilities Package (CUP) is a Java library that provides a set of utilities for Java developers. The main 
 objective of this project is to facilitate the development of Java applications, providing a set of tools that can be 
 used in various contexts. The project is divided into modules, each of which provides a set of utilities for a specific 
 context. The modules are independent of each other, so you can use only the modules you need in your project. The 
 project is open source and is available on GitHub. You can contribute to the project by submitting bug reports, feature 
 requests, or code contributions. The project is licensed under the Apache License 2.0.
-</p>
+</p ali>
 
 ## 🤔 Problem definition
 
-<p style="text-align: justify;">
+<p align="justify">
 Java is a powerful programming language that is widely used in the software development industry. However, Java does 
 not provide a complete set of utilities for developers. Developers often need to write their own utilities to perform 
 common tasks such as reading and writing files, working with dates and times, and working with collections. This can be 
@@ -27,7 +27,7 @@ be used by Java developers to perform common tasks more easily and efficiently.
 
 ## 👨‍💻 Technologies
 
-<p style="text-align: center;">
+<p align="center">
     <img src="https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white" alt="Java"/>
 </p>
 

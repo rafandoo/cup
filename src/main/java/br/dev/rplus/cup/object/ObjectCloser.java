@@ -12,8 +12,7 @@ public abstract class ObjectCloser {
     /**
      * Default constructor.
      */
-    public ObjectCloser() {
-    }
+    protected ObjectCloser() {}
 
     /**
      * Closes an object and its fields.

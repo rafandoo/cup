@@ -24,6 +24,11 @@ public enum ExportType {
 
     private final Class<? extends ExportStrategy> strategyClass;
 
+    /**
+     * Default constructor.
+     *
+     * @param strategyClass the class of the export strategy.
+     */
     ExportType(Class<? extends ExportStrategy> strategyClass) {
         this.strategyClass = strategyClass;
     }

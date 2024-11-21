@@ -346,7 +346,7 @@ public abstract class Logger {
      * @param params  additional parameters to format the message.
      */
     public static void warn(String message, Object... params) {
-        log(LoggerLevel.WARNING, processMessage(message, params));
+        log(LoggerLevel.WARN, processMessage(message, params));
     }
 
     /**

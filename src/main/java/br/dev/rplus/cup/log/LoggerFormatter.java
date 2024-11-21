@@ -53,7 +53,7 @@ public class LoggerFormatter extends Formatter {
         if (level == LoggerLevel.DEBUG) return AnsiColors.LIGHT_BLUE.getColorCode();
         if (level == LoggerLevel.INFO) return AnsiColors.LIGHT_GREEN.getColorCode();
         if (level == LoggerLevel.NOTICE) return AnsiColors.LIGHT_CYAN.getColorCode();
-        if (level == LoggerLevel.WARNING) return AnsiColors.LIGHT_YELLOW.getColorCode();
+        if (level == LoggerLevel.WARN) return AnsiColors.LIGHT_YELLOW.getColorCode();
         if (level == LoggerLevel.ERROR) return AnsiColors.RED.getColorCode();
         if (level == LoggerLevel.FATAL) return AnsiColors.LIGHT_RED.getColorCode();
 
