@@ -15,6 +15,11 @@ import java.io.IOException;
  */
 public class CsvExportStrategy implements ExportStrategy {
 
+    /**
+     * Constructs a new CSV export strategy.
+     */
+    public CsvExportStrategy() {}
+
     @Override
     public void export(Object object, File file) {
         CsvMapper mapper = new CsvMapper();

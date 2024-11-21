@@ -15,6 +15,11 @@ import java.io.IOException;
  */
 public class XmlExportStrategy implements ExportStrategy {
 
+    /**
+     * Constructs a new XML export strategy.
+     */
+    public XmlExportStrategy() {}
+
     @Override
     public void export(Object object, File file) {
         XmlMapper mapper = new XmlMapper();

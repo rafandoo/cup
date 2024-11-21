@@ -10,6 +10,12 @@ import java.lang.reflect.Field;
 public abstract class ObjectCloser {
 
     /**
+     * Default constructor.
+     */
+    public ObjectCloser() {
+    }
+
+    /**
      * Closes an object and its fields.
      *
      * @param object object to be closed.

@@ -13,6 +13,11 @@ import java.util.Map;
 public class Json {
 
     /**
+     * Private constructor to prevent instantiation.
+     */
+    private Json() {}
+
+    /**
      * Converts a {@link Map} to a JSON string.
      *
      * @param map the {@link Map} to convert.

@@ -15,6 +15,11 @@ import java.io.IOException;
  */
 public class JsonExportStrategy implements ExportStrategy {
 
+    /**
+     * Constructs a new JSON export strategy.
+     */
+    public JsonExportStrategy() {}
+
     @Override
     public void export(Object object, File file) {
         ObjectMapper mapper = new ObjectMapper();

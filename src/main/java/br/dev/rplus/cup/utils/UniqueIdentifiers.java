@@ -19,8 +19,7 @@ public class UniqueIdentifiers {
     /**
      * Private constructor to prevent instantiation.
      */
-    private UniqueIdentifiers() {
-    }
+    private UniqueIdentifiers() {}
 
     /**
      * Generates a time-based UUID (Version 1).

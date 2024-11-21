@@ -30,12 +30,39 @@ public class HttpRequester {
      * HTTP methods supported by the `RequestHttp` class.
      */
     public enum HttpMethod {
+        /**
+         * HTTP GET method.
+         */
         GET,
+
+        /**
+         * HTTP POST method.
+         */
         POST,
+
+        /**
+         * HTTP PUT method.
+         */
         PUT,
+
+        /**
+         * HTTP DELETE method.
+         */
         DELETE,
+
+        /**
+         * HTTP PATCH method.
+         */
         PATCH,
+
+        /**
+         * HTTP HEAD method.
+         */
         HEAD,
+
+        /**
+         * HTTP OPTIONS method.
+         */
         OPTIONS
     }
 

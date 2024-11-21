@@ -15,12 +15,39 @@ public class LoggerLevel extends Level {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    /**
+     * The FATAL log level designates very severe error events that will presumably lead the application to abort.
+     */
     public static final LoggerLevel FATAL = new LoggerLevel("FATAL", 1100);
+
+    /**
+     * The ERROR log level designates error events that might still allow the application to continue running.
+     */
     public static final LoggerLevel ERROR = new LoggerLevel("ERROR", 1000);
+
+    /**
+     * The WARN log level designates potentially harmful situations.
+     */
     public static final LoggerLevel WARN = new LoggerLevel("WARN", 900);
+
+    /**
+     * The NOTICE log level designates informational messages that highlight the progress of the application at coarse-grained level.
+     */
     public static final LoggerLevel NOTICE = new LoggerLevel("NOTICE", 850);
+
+    /**
+     * The INFO log level designates informational messages that highlight the progress of the application at fine-grained level.
+     */
     public static final LoggerLevel INFO = new LoggerLevel("INFO", 800);
+
+    /**
+     * The DEBUG log level designates fine-grained informational events that are most useful to debug an application.
+     */
     public static final LoggerLevel DEBUG = new LoggerLevel("DEBUG", 500);
+
+    /**
+     * The TRACE log level designates finer-grained informational events than the DEBUG.
+     */
     public static final LoggerLevel TRACE = new LoggerLevel("TRACE", 400);
 
     private static final Map<String, LoggerLevel> LEVELS;

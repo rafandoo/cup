@@ -21,13 +21,27 @@ public class ExportData {
 
     private static final String DEFAULT_FILE_NAME = "export.txt";
 
+    /**
+     * Default constructor.
+     */
     public ExportData() {
     }
 
+    /**
+     * Constructor with export strategy.
+     *
+     * @param exportStrategy the export strategy to be used.
+     */
     public ExportData(ExportStrategy exportStrategy) {
         this.exportStrategy = exportStrategy;
     }
 
+    /**
+     * Constructor with export strategy and file.
+     *
+     * @param exportStrategy the export strategy to be used.
+     * @param file           the file where the data will be exported.
+     */
     public ExportData(ExportStrategy exportStrategy, File file) {
         this.exportStrategy = exportStrategy;
         this.file = file;

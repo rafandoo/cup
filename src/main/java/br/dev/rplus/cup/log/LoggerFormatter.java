@@ -16,6 +16,11 @@ import java.util.logging.LogRecord;
 public class LoggerFormatter extends Formatter {
 
     /**
+     * Default constructor.
+     */
+    protected LoggerFormatter() {}
+
+    /**
      * Formats the given log record and returns a formatted string.
      *
      * @param record the log record to be formatted.

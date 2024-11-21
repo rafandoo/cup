@@ -16,6 +16,11 @@ import java.util.Objects;
  */
 public class Properties {
 
+    /**
+     * Prevents instantiation of this utility class.
+     */
+    private Properties() {}
+
     private static java.util.Properties properties;
 
     /**

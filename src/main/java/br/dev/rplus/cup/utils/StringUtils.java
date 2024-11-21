@@ -12,8 +12,7 @@ public class StringUtils {
     /**
      * Private constructor to prevent instantiation.
      */
-    private StringUtils() {
-    }
+    private StringUtils() {}
 
     /**
      * Checks if a string is null or empty.

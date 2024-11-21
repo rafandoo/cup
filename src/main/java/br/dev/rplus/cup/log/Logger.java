@@ -34,6 +34,11 @@ public abstract class Logger {
     private static final String DEFAULT_LEVEL = "INFO";
 
     /**
+     * Private constructor to prevent instantiation.
+     */
+    private Logger() {}
+
+    /**
      * Initializes the logger with default settings.
      */
     public static void init() {

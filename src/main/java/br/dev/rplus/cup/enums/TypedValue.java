@@ -8,6 +8,11 @@ public class TypedValue {
 
     private final Object value;
 
+    /**
+     * Constructor.
+     *
+     * @param value the value to store.
+     */
     public TypedValue(Object value) {
         this.value = value;
     }
