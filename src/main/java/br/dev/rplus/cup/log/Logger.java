@@ -2,11 +2,13 @@ package br.dev.rplus.cup.log;
 
 import java.io.File;
 import java.io.OutputStream;
+import java.text.Normalizer;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.*;
+import java.util.regex.Pattern;
 
 /**
  * LoggerCup is an abstract class that facilitates logging management for Java applications.
@@ -15,6 +17,7 @@ import java.util.logging.*;
  * The class is designed to be used across the application as a centralized logging tool.
  */
 public abstract class Logger {
+
     /**
      * Logger instance.
      */
@@ -23,7 +26,7 @@ public abstract class Logger {
     /**
      * Logger identifier.
      */
-    private static String id;
+    private static String application;
 
     /**
      * Default log level.
@@ -34,47 +37,47 @@ public abstract class Logger {
      * Initializes the logger with default settings.
      */
     public static void init() {
-        init("br.dev.rplus", false, DEFAULT_LEVEL);
+        init("br.dev.rplus", DEFAULT_LEVEL, false);
     }
 
     /**
      * Initializes the logger with a custom identifier.
      *
-     * @param id Logger identifier.
+     * @param application logger identifier.
      */
-    public static void init(String id) {
-        init(id, false, DEFAULT_LEVEL);
+    public static void init(String application) {
+        init(application, DEFAULT_LEVEL, false);
     }
 
     /**
      * Initializes the logger with a custom identifier and an option to log to a file.
      *
-     * @param id     Logger identifier.
-     * @param toFile Indicates whether the log should be written to a file.
+     * @param application logger identifier.
+     * @param level       log level (e.g., "INFO", "DEBUG").
      */
-    public static void init(String id, boolean toFile) {
-        init(id, toFile, DEFAULT_LEVEL);
+    public static void init(String application, String level) {
+        init(application, level, false);
     }
 
     /**
      * Initializes the logger with a custom identifier, an option to log to a file, and a specified log level.
      *
-     * @param id     Logger identifier.
-     * @param toFile Indicates whether the log should be written to a file.
-     * @param level  Log level (e.g., "INFO", "DEBUG").
+     * @param application logger identifier.
+     * @param level       log level (e.g., "INFO", "DEBUG").
+     * @param toFile      indicates whether the log should be written to a file.
      */
-    public static synchronized void init(String id, boolean toFile, String level) {
+    public static synchronized void init(String application, String level, boolean toFile) {
         try {
             if (logger == null) {
-                setId(id);
-                logger = java.util.logging.Logger.getLogger(id);
-                logFile(toFile);
+                setApplication(application);
+                logger = java.util.logging.Logger.getLogger(application);
                 setLevel(level);
-                logger.setUseParentHandlers(false); // Disable default console handler
-                addCustomConsoleHandler(); // Add custom handler for colored output
+                addCustomConsoleHandler();
+                logFile(toFile);
+                logger.setUseParentHandlers(false);
             }
         } catch (Exception e) {
-            java.util.logging.Logger.getLogger(Logger.class.getName()).log(LevelCup.CRITICAL, "Error initializing logging.", e);
+            java.util.logging.Logger.getLogger(Logger.class.getName()).log(LoggerLevel.FATAL, "Error initializing logging.", e);
         }
     }
 
@@ -89,13 +92,14 @@ public abstract class Logger {
             }
         };
         consoleHandler.setFormatter(new LoggerFormatter());
+        consoleHandler.setLevel(logger.getLevel());
         logger.addHandler(consoleHandler);
     }
 
     /**
      * Returns the logger instance.
      *
-     * @return Logger instance.
+     * @return logger instance.
      */
     public static java.util.logging.Logger getLogger() {
         if (logger == null) {
@@ -105,39 +109,52 @@ public abstract class Logger {
     }
 
     /**
-     * Sets the logger identifier.
+     * Sets the application identifier.
      *
-     * @param id Logger identifier.
+     * @param application logger identifier.
      */
-    public static void setId(String id) {
-        Logger.id = id;
+    public static void setApplication(String application) {
+        Logger.application = application;
     }
 
     /**
-     * Returns the logger identifier.
+     * Returns the application identifier.
      *
-     * @return Logger identifier.
+     * @return application identifier.
      */
-    public static String getId() {
-        return id;
+    public static String getApplication() {
+        return application;
+    }
+
+    /**
+     * Returns the log level for the logger.
+     *
+     * @return log level.
+     */
+    public static Level getLevel() {
+        return getLogger().getLevel();
     }
 
     /**
      * Sets the log level for the logger.
      *
-     * @param level Log level.
+     * @param level log level.
      */
     public static void setLevel(Level level) {
         getLogger().setLevel(level);
-        for (Handler handler : getLogger().getHandlers()) {
-            handler.setLevel(level);
+        try {
+            java.util.logging.Logger.getGlobal().getParent().getHandlers()[0].setLevel(level);
+        } catch (Exception e) {
+            for (Handler handler : getLogger().getHandlers()) {
+                handler.setLevel(level);
+            }
         }
     }
 
     /**
      * Sets the log level for the logger using a string value.
      *
-     * @param level Log level as a string.
+     * @param level log level as a string.
      */
     public static void setLevel(String level) {
         setLevel(levelParser(level));
@@ -146,12 +163,12 @@ public abstract class Logger {
     /**
      * Converts a string log level to a {@link Level} object.
      *
-     * @param level Log level as a string.
+     * @param level log level as a string.
      * @return {@link Level} object.
      */
     private static Level levelParser(String level) {
         try {
-            return LevelCup.parse(level);
+            return LoggerLevel.parse(level);
         } catch (IllegalArgumentException e) {
             return Level.parse(DEFAULT_LEVEL);
         }
@@ -166,7 +183,7 @@ public abstract class Logger {
         File file;
         DateTimeFormatter dft = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         try {
-            String path = processMessage("%s-%s-%s_%s.log", dft.format(LocalDateTime.now()), getId());
+            String path = processMessage("%s-%s-%s_%s.log", dft.format(LocalDateTime.now()), getApplication());
             file = new File(path);
             if (!file.getParentFile().exists()) {
                 boolean created = file.getParentFile().mkdirs();
@@ -183,7 +200,7 @@ public abstract class Logger {
     /**
      * Configures the logger to write logs to a file.
      *
-     * @param toFile Indicates whether the log should be written to a file.
+     * @param toFile indicates whether the log should be written to a file.
      */
     public static void logFile(boolean toFile) {
         if (toFile) {
@@ -201,18 +218,18 @@ public abstract class Logger {
     /**
      * Processes the log message, formatting it and appending exceptions if present.
      *
-     * @param message Log message.
-     * @param params  Additional parameters to format the message.
-     * @return Processed message.
+     * @param message log message.
+     * @param params  additional parameters to format the message.
+     * @return processed message.
      */
     private static String processMessage(String message, Object... params) {
+        if (message == null || message.isEmpty()) {
+            return "";
+        }
+
         List<Throwable> exceptions = new ArrayList<>();
         List<Object> paramsList = new ArrayList<>();
         try {
-            if (params.length == 0) {
-                return message;
-            }
-
             for (Object param : params) {
                 if (param instanceof Throwable) {
                     exceptions.add((Throwable) param);
@@ -222,6 +239,7 @@ public abstract class Logger {
             }
 
             String formattedMessage = message.replaceAll("<br>", System.lineSeparator());
+
             if (!paramsList.isEmpty()) {
                 formattedMessage = String.format(formattedMessage, paramsList.toArray());
             }
@@ -230,11 +248,14 @@ public abstract class Logger {
                 StringBuilder sb = new StringBuilder(" Exceptions:\n");
                 for (Throwable throwable : exceptions) {
                     sb.append(throwable.getMessage()).append("\n");
+                    for (StackTraceElement stackTraceElement : throwable.getStackTrace()) {
+                        sb.append(stackTraceElement).append("\n");
+                    }
                 }
-
-                formattedMessage += sb.toString();
+                formattedMessage = formattedMessage + sb;
             }
-            return formattedMessage;
+
+            return removeAccentsAndSpecialCharacters(formattedMessage);
         } catch (Exception e) {
             return message;
         } finally {
@@ -244,77 +265,102 @@ public abstract class Logger {
     }
 
     /**
+     * Removes accents and special characters from a string.
+     *
+     * @param str input string.
+     * @return string without accents and special characters.
+     */
+    private static String removeAccentsAndSpecialCharacters(String str) {
+        if (str == null || str.isEmpty()) {
+            return str;
+        }
+        String normalized = Normalizer.normalize(str, Normalizer.Form.NFD);
+        Pattern pattern = Pattern.compile("\\p{M}");
+        return pattern.matcher(normalized).replaceAll("").replaceAll("[^\\p{ASCII}]", "");
+    }
+
+    /**
      * Logs a message at the specified log level.
      *
-     * @param level   Log level.
-     * @param message Log message.
+     * @param level   log level.
+     * @param message log message.
      */
     private static void log(Level level, String message) {
         try {
             StackTraceElement ste = Thread.currentThread().getStackTrace()[3];
             getLogger().logp(level, ste.getClassName(), ste.getMethodName(), message);
         } catch (Exception e) {
-            java.util.logging.Logger.getLogger(Logger.class.getName()).log(Level.SEVERE, "Error logging message.", e);
+            java.util.logging.Logger.getLogger(Logger.class.getName()).log(LoggerLevel.FATAL, "Error logging message.", e);
         }
+    }
+
+    /**
+     * Logs a message at the TRACE level.
+     *
+     * @param message log message.
+     * @param params  additional parameters to format the message.
+     */
+    public static void trace(String message, Object... params) {
+        log(LoggerLevel.TRACE, processMessage(message, params));
     }
 
     /**
      * Logs a message at the DEBUG level.
      *
-     * @param message Log message.
-     * @param params  Additional parameters to format the message.
+     * @param message log message.
+     * @param params  additional parameters to format the message.
      */
     public static void debug(String message, Object... params) {
-        log(LevelCup.DEBUG, processMessage(message, params));
+        log(LoggerLevel.DEBUG, processMessage(message, params));
     }
 
     /**
      * Logs a message at the INFO level.
      *
-     * @param message Log message.
-     * @param params  Additional parameters to format the message.
+     * @param message log message.
+     * @param params  additional parameters to format the message.
      */
     public static void info(String message, Object... params) {
-        log(LevelCup.INFO, processMessage(message, params));
+        log(LoggerLevel.INFO, processMessage(message, params));
     }
 
     /**
      * Logs a message at the NOTICE level.
      *
-     * @param message Log message.
-     * @param params  Additional parameters to format the message.
+     * @param message log message.
+     * @param params  additional parameters to format the message.
      */
     public static void notice(String message, Object... params) {
-        log(LevelCup.NOTICE, processMessage(message, params));
+        log(LoggerLevel.NOTICE, processMessage(message, params));
     }
 
     /**
      * Logs a message at the WARNING level.
      *
-     * @param message Log message.
-     * @param params  Additional parameters to format the message.
+     * @param message log message.
+     * @param params  additional parameters to format the message.
      */
     public static void warn(String message, Object... params) {
-        log(LevelCup.WARNING, processMessage(message, params));
+        log(LoggerLevel.WARNING, processMessage(message, params));
     }
 
     /**
      * Logs a message at the ERROR level.
      *
-     * @param message Log message.
-     * @param params  Additional parameters to format the message.
+     * @param message log message.
+     * @param params  additional parameters to format the message.
      */
     public static void error(String message, Object... params) {
-        log(LevelCup.ERROR, processMessage(message, params));
+        log(LoggerLevel.ERROR, processMessage(message, params));
     }
 
     /**
-     * Logs a message at the CRITICAL level.
+     * Logs a message at the FATAL level.
      *
-     * @param message Log message.
-     * @param params  Additional parameters to format the message.
+     * @param message log message.
+     * @param params  additional parameters to format the message.
      */
-    public static void critical(String message, Object... params) {
-        log(LevelCup.CRITICAL, processMessage(message, params));
+    public static void fatal(String message, Object... params) {
+        log(LoggerLevel.FATAL, processMessage(message, params));
     }
 }

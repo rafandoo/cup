@@ -24,11 +24,9 @@ public class JsonExportStrategy implements ExportStrategy {
             writer.write(json);
             writer.close();
         } catch (JsonProcessingException e) {
-            Logger.error("Error converting object to JSON: <br>%s", e.getMessage());
-            throw new RuntimeException(e);
+            Logger.error("Error converting object to JSON.", e);
         } catch (IOException e) {
-            Logger.error("Error writing JSON file: <br>%s", e.getMessage());
-            throw new RuntimeException(e);
+            Logger.error("Error writing JSON file.", e);
         }
     }
 }

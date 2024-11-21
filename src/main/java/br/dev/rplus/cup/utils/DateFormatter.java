@@ -13,13 +13,13 @@ import java.util.Date;
  */
 public class DateFormatter {
 
-    private static SimpleDateFormat dateFormatter;
-    private static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
+    private static SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
 
-    public DateFormatter() {
-        dateFormatter = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
-    }
-
+    /**
+     * Default constructor.
+     *
+     * @param format the format to use for the date formatter.
+     */
     public DateFormatter(String format) {
         try {
             dateFormatter = new SimpleDateFormat(format);
@@ -48,8 +48,8 @@ public class DateFormatter {
             return getDateFormatter().format(date);
         } catch (Exception e) {
             Logger.warn("Failed to format date: %s", date, e);
-            return null;
         }
+        return null;
     }
 
     /**
@@ -63,8 +63,8 @@ public class DateFormatter {
             return getDateFormatter().format(date);
         } catch (Exception e) {
             Logger.warn("Failed to format date: %s", date, e);
-            return null;
         }
+        return null;
     }
 
     /**
@@ -77,9 +77,9 @@ public class DateFormatter {
         try {
             return getDateFormatter().parse(date);
         } catch (ParseException pe) {
-            Logger.warn("Failed to parse date: %s",date, pe);
-            return null;
+            Logger.warn("Failed to parse date: %s", date, pe);
         }
+        return null;
     }
 
     /**
@@ -93,7 +93,7 @@ public class DateFormatter {
             return String.valueOf(new Timestamp(date.getTime()).getTime() / 1000);
         } catch (Exception e) {
             Logger.warn("Failed to format timestamp: %s", date, e);
-            return null;
         }
+        return null;
     }
 }

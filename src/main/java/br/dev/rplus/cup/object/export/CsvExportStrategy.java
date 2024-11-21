@@ -24,11 +24,9 @@ public class CsvExportStrategy implements ExportStrategy {
             writer.write(csv);
             writer.close();
         } catch (JsonProcessingException e) {
-            Logger.error("Error converting object to CSV: <br>%s", e.getMessage());
-            throw new RuntimeException(e);
+            Logger.error("Error converting object to CSV.", e);
         } catch (IOException e) {
-            Logger.error("Error writing CSV file: <br>%s", e.getMessage());
-            throw new RuntimeException(e);
+            Logger.error("Error writing CSV file.", e);
         }
     }
 }

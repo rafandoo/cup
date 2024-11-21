@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id 'maven-publish'
-    id 'com.github.johnrengelman.shadow' version '8.1.1'
+    id 'application'
 }
 
 apply from: 'version.gradle'
@@ -17,6 +17,8 @@ dependencies {
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.17.2'
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.17.2'
     implementation 'org.json:json:20240303'
+    implementation 'com.github.f4b6a3:uuid-creator:6.0.0'
+    implementation 'com.github.f4b6a3:ulid-creator:5.2.3'
 
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
@@ -25,6 +27,9 @@ dependencies {
 java {
     sourceCompatibility = JavaVersion.VERSION_21
     targetCompatibility = JavaVersion.VERSION_21
+
+    withJavadocJar()
+    withSourcesJar()
 }
 
 compileJava {
@@ -36,11 +41,7 @@ test {
     useJUnitPlatform()
 }
 
-shadowJar {
-    archiveBaseName.set(rootProject.name)
-    archiveClassifier.set('all')
-    archiveVersion.set(version)
-
+jar {
     manifest {
         attributes(
                 'Implementation-Title': 'Coffee Utilities Package',
@@ -48,10 +49,29 @@ shadowJar {
                 'Built-By': System.getProperty('user.name'),
                 'Built-Date': new Date(),
                 'Built-JDK': System.getProperty('java.version'),
-                'Main-Class': 'br.dev.rplus.Main'
+                'Main-Class': 'br.dev.rplus.cup.Main'
         )
     }
 }
+
+tasks.register('fatJar', Jar) {
+    group = 'build'
+    description = 'Builds a JAR with dependencies (fat jar).'
+    manifest.from jar.manifest
+    archiveClassifier.set('aio')
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
+tasks.named('sourcesJar') {
+    manifest.from jar.manifest
+}
+
+tasks.named('javadocJar') {
+    manifest.from jar.manifest
+}
+
 
 publishing {
     publications {
@@ -61,10 +81,9 @@ publishing {
             artifacts.clear()
 
             artifact(tasks.jar)
-
-            artifact(tasks.shadowJar) {
-                classifier = 'all'
-            }
+            artifact(tasks.named('fatJar'))
+            artifact(tasks.named('sourcesJar'))
+            artifact(tasks.named('javadocJar'))
         }
     }
 

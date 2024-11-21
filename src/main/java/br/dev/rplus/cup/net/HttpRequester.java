@@ -17,12 +17,14 @@ import java.util.Map;
  */
 public class HttpRequester {
 
-    private final URL url;
+    private URL url;
     private HttpMethod method;
     private Map<String, String> headers;
     private String requestBody;
     private int connectionTimeout = 30000;
     private int readTimeout = 30000;
+    private boolean followRedirects;
+    private HttpURLConnection conn;
 
     /**
      * HTTP methods supported by the `RequestHttp` class.
@@ -37,26 +39,52 @@ public class HttpRequester {
         OPTIONS
     }
 
-    private HttpRequester(URL url) {
-        this.url = url;
+    /**
+     * Private constructor to prevent instantiation.
+     */
+    private HttpRequester() {
         this.headers = this.getDefaultHeaders();
         this.method = HttpMethod.GET;
+        this.followRedirects = false;
     }
 
     /**
-     * Creates a new instance of the `RequestHttp` class from a given URL string.
+     * Creates a new instance of the `RequestHttp` class.
      *
-     * @param url the URL string to create the `RequestHttp` instance from.
      * @return the created `RequestHttp` instance.
      */
-    public static HttpRequester from(String url) {
+    public static HttpRequester builder() {
+        return new HttpRequester();
+    }
+
+    /**
+     * Defines the URL for the HTTP request.
+     *
+     * @param url the URL to be set.
+     * @return the updated RequestHttp object.
+     */
+    public HttpRequester url(String url) {
         try {
-            URI uri = new URI(url);
-            return new HttpRequester(uri.toURL());
+            this.url = URI.create(url).toURL();
         } catch (Exception e) {
-            Logger.error("Failed to create HttpRequester from url: %s", url, e);
-            throw new RuntimeException(e);
+            Logger.error("Failed to define url for request: %s", url, e);
         }
+        return this;
+    }
+
+    /**
+     * Defines the URL for the HTTP request.
+     *
+     * @param uri the URL to be set.
+     * @return the updated RequestHttp object.
+     */
+    public HttpRequester url(URI uri) {
+        try {
+            this.url = uri.toURL();
+        } catch (Exception e) {
+            Logger.error("Failed to define url for request: %s", uri, e);
+        }
+        return this;
     }
 
     /**
@@ -117,18 +145,74 @@ public class HttpRequester {
     }
 
     /**
+     * Sets whether to follow redirects for the request.
+     *
+     * @param followRedirects a boolean value indicating whether to follow redirects.
+     * @return the updated RequestHttp object.
+     */
+    public HttpRequester followRedirects(boolean followRedirects) {
+        this.followRedirects = followRedirects;
+        return this;
+    }
+
+    /**
      * Sends the HTTP request and retrieves the response.
      *
      * @return a StringBuilder object containing the response from the URL.
      */
     public StringBuilder send() {
-        HttpURLConnection conn = null;
+        this.conn = null;
         StringBuilder response;
         try {
-            conn = (HttpURLConnection) this.url.openConnection();
-            conn.setRequestMethod(this.method.name());
-            conn.setConnectTimeout(this.connectionTimeout);
-            conn.setReadTimeout(this.readTimeout);
+            this.prepareRequest();
+
+            if (this.conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(this.conn.getInputStream()));
+                response = new StringBuilder();
+                String line;
+
+                while ((line = reader.readLine()) != null) {
+                    response.append(line);
+                }
+                reader.close();
+                return response;
+            } else {
+                Logger.warn("Failed to retrieve data from URL: %s", this.url);
+                Logger.warn("Response code: %s.", this.conn.getResponseCode());
+                Logger.warn("Response message: %s.", this.conn.getResponseMessage());
+            }
+        } catch (IOException e) {
+            Logger.error("Failed to send request to url: %s", this.url, e);
+            throw new RuntimeException(e);
+        } finally {
+            if (this.conn != null) {
+                this.conn.disconnect();
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Sends the HTTP request and retrieves the response.
+     *
+     * @return the HttpURLConnection object.
+     */
+    public HttpURLConnection sendRaw() {
+        this.prepareRequest();
+        return this.conn;
+    }
+
+    /**
+     * Prepares the HTTP request by setting up the connection and headers.
+     */
+    private void prepareRequest() {
+        try {
+            this.conn = (HttpURLConnection) this.url.openConnection();
+            this.conn.setRequestMethod(this.method.name());
+            this.conn.setConnectTimeout(this.connectionTimeout);
+            this.conn.setReadTimeout(this.readTimeout);
+            this.conn.setInstanceFollowRedirects(this.followRedirects);
 
             if (this.headers != null && !this.headers.isEmpty()) {
                 for (Map.Entry<String, String> entry : this.headers.entrySet()) {
@@ -145,32 +229,10 @@ public class HttpRequester {
                     }
                 }
             }
-
-            if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                response = new StringBuilder();
-                String line;
-
-                while ((line = reader.readLine()) != null) {
-                    response.append(line);
-                }
-                reader.close();
-                return response;
-            } else {
-                Logger.warn("Failed to retrieve data from URL: %s", this.url);
-                Logger.warn("Response code: %s.", conn.getResponseCode());
-                Logger.warn("Response message: %s.", conn.getResponseMessage());
-            }
         } catch (IOException e) {
-            Logger.error("Failed to send request to url: %s", this.url, e);
+            Logger.error("Failed to prepare request to url: %s", this.url, e);
             throw new RuntimeException(e);
-        } finally {
-            if (conn != null) {
-                conn.disconnect();
-            }
         }
-
-        return null;
     }
 
     /**

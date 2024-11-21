@@ -1,6 +1,6 @@
 package br.dev.rplus.cup.log;
 
-import br.dev.rplus.cup.others.AnsiColors;
+import br.dev.rplus.cup.enums.AnsiColors;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -18,8 +18,8 @@ public class LoggerFormatter extends Formatter {
     /**
      * Formats the given log record and returns a formatted string.
      *
-     * @param record The log record to be formatted.
-     * @return The formatted log message as a string.
+     * @param record the log record to be formatted.
+     * @return the formatted log message as a string.
      */
     @Override
     public String format(LogRecord record) {
@@ -40,16 +40,17 @@ public class LoggerFormatter extends Formatter {
     /**
      * Determines the appropriate ANSI color code for the given log level.
      *
-     * @param level The log level for which to determine the color code.
-     * @return The ANSI color code as a string.
+     * @param level the log level for which to determine the color code.
+     * @return the ANSI color code as a string.
      */
     private String getColorForLevel(Level level) {
-        if (level == LevelCup.DEBUG) return AnsiColors.LIGHT_BLUE.getColorCode();
-        if (level == LevelCup.INFO) return AnsiColors.LIGHT_GREEN.getColorCode();
-        if (level == LevelCup.NOTICE) return AnsiColors.LIGHT_CYAN.getColorCode();
-        if (level == LevelCup.WARNING) return AnsiColors.LIGHT_YELLOW.getColorCode();
-        if (level == LevelCup.ERROR) return AnsiColors.RED.getColorCode();
-        if (level == LevelCup.CRITICAL) return AnsiColors.LIGHT_RED.getColorCode();
+        if (level == LoggerLevel.TRACE) return AnsiColors.LIGHT_BLUE.getColorCode();
+        if (level == LoggerLevel.DEBUG) return AnsiColors.LIGHT_BLUE.getColorCode();
+        if (level == LoggerLevel.INFO) return AnsiColors.LIGHT_GREEN.getColorCode();
+        if (level == LoggerLevel.NOTICE) return AnsiColors.LIGHT_CYAN.getColorCode();
+        if (level == LoggerLevel.WARNING) return AnsiColors.LIGHT_YELLOW.getColorCode();
+        if (level == LoggerLevel.ERROR) return AnsiColors.RED.getColorCode();
+        if (level == LoggerLevel.FATAL) return AnsiColors.LIGHT_RED.getColorCode();
 
         return AnsiColors.RESET.getColorCode();
     }
@@ -57,9 +58,9 @@ public class LoggerFormatter extends Formatter {
     /**
      * Adds ANSI color codes to the given message based on the provided color code.
      *
-     * @param message   The message to be colorized.
-     * @param colorCode The ANSI color code to apply to the message.
-     * @return The colorized message as a string.
+     * @param message   the message to be colorized.
+     * @param colorCode the ANSI color code to apply to the message.
+     * @return the colorized message as a string.
      */
     private String colorizeMessage(String message, String colorCode) {
         return String.format("%s%s%s", colorCode, message, AnsiColors.RESET.getColorCode());

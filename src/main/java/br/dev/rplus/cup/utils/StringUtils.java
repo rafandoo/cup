@@ -10,6 +10,12 @@ import java.util.regex.Pattern;
 public class StringUtils {
 
     /**
+     * Private constructor to prevent instantiation.
+     */
+    private StringUtils() {
+    }
+
+    /**
      * Checks if a string is null or empty.
      *
      * @param str the string to check.
@@ -187,7 +193,7 @@ public class StringUtils {
         String[] words = str.split(" ");
         StringBuilder titleCase = new StringBuilder();
         for (String word : words) {
-            if (word.length() > 0) {
+            if (!word.isEmpty()) {
                 titleCase.append(capitalize(word)).append(" ");
             }
         }

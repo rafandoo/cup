@@ -22,7 +22,6 @@ public class ExportData {
     private static final String DEFAULT_FILE_NAME = "export.txt";
 
     public ExportData() {
-
     }
 
     public ExportData(ExportStrategy exportStrategy) {
@@ -34,6 +33,11 @@ public class ExportData {
         this.file = file;
     }
 
+    /**
+     * Gets the export strategy.
+     *
+     * @return the export strategy.
+     */
     public ExportStrategy getExportStrategy() {
         try {
             if (this.exportStrategy == null) {
@@ -41,15 +45,25 @@ public class ExportData {
             }
             return exportStrategy;
         } catch (Exception e) {
-            Logger.error("Error loading export strategy: <br>%s", e.getMessage());
+            Logger.error("Error loading export strategy.", e);
             return null;
         }
     }
 
+    /**
+     * Sets the export strategy.
+     *
+     * @param exportStrategy the export strategy to be set.
+     */
     public void setExportStrategy(ExportStrategy exportStrategy) {
         this.exportStrategy = exportStrategy;
     }
 
+    /**
+     * Gets the file where the data will be exported.
+     *
+     * @return the file where the data will be exported.
+     */
     public File getFile() {
         if (this.file == null) {
             this.file = new File(DEFAULT_FILE_NAME);
@@ -66,7 +80,7 @@ public class ExportData {
         try {
             this.getExportStrategy().export(object, getFile());
         } catch (Exception e) {
-            Logger.error("Error exporting object: <br>%s", e.getMessage());
+            Logger.error("Error exporting object.", e);
         }
     }
 
@@ -83,7 +97,7 @@ public class ExportData {
             this.setExportStrategy(exportType.getStrategyClass().getDeclaredConstructor().newInstance());
             this.getExportStrategy().export(object, getFile());
         } catch (Exception e) {
-            Logger.error("Error exporting object: <br>%s", e.getMessage());
+            Logger.error("Error exporting object.", e);
         }
     }
 
@@ -101,7 +115,7 @@ public class ExportData {
             this.setExportStrategy(exportType.getStrategyClass().getDeclaredConstructor().newInstance());
             this.getExportStrategy().export(object, file);
         } catch (Exception e) {
-            Logger.error("Error exporting object: <br>%s", e.getMessage());
+            Logger.error("Error exporting object.", e);
         }
     }
 }

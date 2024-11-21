@@ -24,11 +24,9 @@ public class XmlExportStrategy implements ExportStrategy {
             writer.write(xml);
             writer.close();
         } catch (JsonProcessingException e) {
-            Logger.error("Error converting object to XML: <br>%s", e.getMessage());
-            throw new RuntimeException(e);
+            Logger.error("Error converting object to XML.", e);
         } catch (IOException e) {
-            Logger.error("Error writing XML file: <br>%s", e.getMessage());
-            throw new RuntimeException(e);
+            Logger.error("Error writing XML file.", e);
         }
     }
 }
