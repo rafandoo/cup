@@ -1,7 +1,12 @@
+br.dev.rplus.cup.config
+br.dev.rplus.cup.config.environment
+br.dev.rplus.cup.config.source
 br.dev.rplus.cup.enums
-br.dev.rplus.cup.environment
 br.dev.rplus.cup.log
-br.dev.rplus.cup.net
 br.dev.rplus.cup.object
 br.dev.rplus.cup.object.export
+br.dev.rplus.cup.object.export.strategies
+br.dev.rplus.cup.os
+br.dev.rplus.cup.reflection
+br.dev.rplus.cup.request
 br.dev.rplus.cup.utils
