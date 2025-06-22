@@ -1,5 +1,5 @@
 dependencies {
-    implementation 'org.json:json:20250107'
+    implementation 'org.json:json:20250517'
     implementation 'org.yaml:snakeyaml:2.4'
     implementation 'com.github.f4b6a3:uuid-creator:6.0.0'
     implementation 'com.github.f4b6a3:ulid-creator:5.2.3'
