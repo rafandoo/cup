@@ -13,6 +13,6 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Auto Assign Reviewers for Pull Requests
-        uses: kentaro-m/auto-assign-action@2.0.0
+        uses: kentaro-m/auto-assign-action@v2.0.0
         with:
           configuration-path: .github/auto_assign.yml
