@@ -115,47 +115,85 @@ public class UrlBuilder {
     }
 
     /**
-     * Builds the URL by appending the protocol, URL, port, path, and parameters.
+     * Builds the final URL if it has not been built yet.
      */
     private void build() {
         if (this.built) return;
 
-        if (!StringUtils.isNullOrEmpty(this.protocol) && (this.url == null || !this.url.contains("://"))) {
+        this.appendProtocolIfNecessary();
+        this.appendUrl();
+        this.appendPortIfNecessary();
+        this.appendPath();
+        this.appendParameters();
+
+        this.built = true;
+    }
+
+    /**
+     * Appends the protocol to the URL if it's defined and not already present in the URL.
+     */
+    private void appendProtocolIfNecessary() {
+        if (!StringUtils.isNullOrEmpty(this.protocol)
+            && (this.url == null || !this.url.contains("://"))) {
             this.urlBuilder.append(this.protocol).append("://");
         }
+    }
 
+    /**
+     * Appends the main URL (host/domain) if defined.
+     */
+    private void appendUrl() {
         if (!StringUtils.isNullOrEmpty(this.url)) {
             this.urlBuilder.append(this.url);
         }
+    }
 
+    /**
+     * Appends the port to the URL if it is greater than 0 and not already included.
+     */
+    private void appendPortIfNecessary() {
         if (this.port > 0 && (this.url == null || !this.url.contains(":"))) {
             this.urlBuilder.append(":").append(this.port);
         }
+    }
 
+    /**
+     * Appends the path to the URL, ensuring that slashes are correctly positioned.
+     */
+    private void appendPath() {
         if (!StringUtils.isNullOrEmpty(this.path)) {
-            if (!this.path.startsWith("/") && (this.url == null || !this.url.endsWith("/"))) {
+            boolean needsSlash = !this.path.startsWith("/") && (this.url == null || !this.url.endsWith("/"));
+            if (needsSlash) {
                 this.urlBuilder.append("/");
             }
             this.urlBuilder.append(this.path);
         }
+    }
 
-        if (!params.isEmpty()) {
-            this.urlBuilder.append(this.urlBuilder.indexOf("?") == -1 ? "?" : "");
+    /**
+     * Appends query parameters to the URL in the format <code>?key=value&key2=value2...</code>.
+     * Each key and value is URL-encoded using UTF-8.
+     */
+    private void appendParameters() {
+        if (this.params.isEmpty()) return;
 
-            boolean first = this.urlBuilder.charAt(this.urlBuilder.length() - 1) == '?';
-            for (var entry : this.params.entrySet()) {
-                if (!first) {
-                    this.urlBuilder.append("&");
-                } else {
-                    first = false;
-                }
-                var key = URLEncoder.encode(entry.getKey(), StandardCharsets.UTF_8);
-                var value = URLEncoder.encode(entry.getValue(), StandardCharsets.UTF_8);
-                this.urlBuilder.append(key).append("=").append(value);
-            }
+        // Append "?" if not present
+        if (this.urlBuilder.indexOf("?") == -1) {
+            this.urlBuilder.append("?");
         }
 
-        this.built = true;
+        boolean first = this.urlBuilder.charAt(this.urlBuilder.length() - 1) == '?';
+        for (var entry : this.params.entrySet()) {
+            if (!first) {
+                this.urlBuilder.append("&");
+            } else {
+                first = false;
+            }
+
+            String key = URLEncoder.encode(entry.getKey(), StandardCharsets.UTF_8);
+            String value = URLEncoder.encode(entry.getValue(), StandardCharsets.UTF_8);
+            this.urlBuilder.append(key).append("=").append(value);
+        }
     }
 
     /**
