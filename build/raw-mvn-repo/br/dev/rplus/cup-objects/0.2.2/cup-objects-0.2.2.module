@@ -1,0 +1,123 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "br.dev.rplus",
+    "module": "cup-objects",
+    "version": "0.2.2",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.13"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 21,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "files": [
+        {
+          "name": "cup-objects-0.2.2.jar",
+          "url": "cup-objects-0.2.2.jar",
+          "size": 13648,
+          "sha512": "136939d8115187960adefca0d8775a6a1d058308fbd7fdf05ad46dda70e40effba39c4e54ec8d1fee583b5e463eee3fdc9ccc2ccafcfc60f2f45108fe2d7ad4d",
+          "sha256": "8b625ed14b7f8650e03c241d177bd5103c27555968e0f93cc6b99c0394a3d4ba",
+          "sha1": "62847559cee0a095f061551e545a04369dbb0207",
+          "md5": "5b381b51bfed8cf2a356b5576fcaeaf1"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 21,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "br.dev.rplus",
+          "module": "cup-core",
+          "version": {
+            "requires": "0.2.2"
+          }
+        },
+        {
+          "group": "com.fasterxml.jackson.dataformat",
+          "module": "jackson-dataformat-xml",
+          "version": {
+            "requires": "2.19.1"
+          }
+        },
+        {
+          "group": "com.fasterxml.jackson.dataformat",
+          "module": "jackson-dataformat-csv",
+          "version": {
+            "requires": "2.19.1"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "cup-objects-0.2.2.jar",
+          "url": "cup-objects-0.2.2.jar",
+          "size": 13648,
+          "sha512": "136939d8115187960adefca0d8775a6a1d058308fbd7fdf05ad46dda70e40effba39c4e54ec8d1fee583b5e463eee3fdc9ccc2ccafcfc60f2f45108fe2d7ad4d",
+          "sha256": "8b625ed14b7f8650e03c241d177bd5103c27555968e0f93cc6b99c0394a3d4ba",
+          "sha1": "62847559cee0a095f061551e545a04369dbb0207",
+          "md5": "5b381b51bfed8cf2a356b5576fcaeaf1"
+        }
+      ]
+    },
+    {
+      "name": "javadocElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "javadoc",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "cup-objects-0.2.2-javadoc.jar",
+          "url": "cup-objects-0.2.2-javadoc.jar",
+          "size": 129236,
+          "sha512": "8fde8a4d00b0b42593a19e8709bed734cfb4e9e29f109c9463185b8e2ea41fb11c35dd2e19181b85a0c2a3814ff6b5cda879660641bfa8fdf31dc88e0e9c8e83",
+          "sha256": "e6f323e023e39337d9f0e518c8a7720db9778a71e9d653683084ea0e36beb14a",
+          "sha1": "f158447b65f664eb9b22b017b1b94a28fb354235",
+          "md5": "e10718270cb0c902cdc398be68bde382"
+        }
+      ]
+    },
+    {
+      "name": "sourcesElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "cup-objects-0.2.2-sources.jar",
+          "url": "cup-objects-0.2.2-sources.jar",
+          "size": 8526,
+          "sha512": "b012a361cabf8912c2ce41414a1fc66f7858eecd38f1427535a8963d2b6397ba15e616e0d6e3e20cfe5ac758c381e6e555be7018ab5ae2b47b25eaae299876a4",
+          "sha256": "8f6b93c1ae62dd98f8334452e02d15aa7513a95f01178e64e3dab1c1903bc903",
+          "sha1": "548d5b6e5d194d349ecc20632ece824402865023",
+          "md5": "4c850efff74b69f834f53b5112aa9b0f"
+        }
+      ]
+    }
+  ]
+}

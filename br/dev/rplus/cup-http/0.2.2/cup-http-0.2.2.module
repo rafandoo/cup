@@ -1,0 +1,109 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "br.dev.rplus",
+    "module": "cup-http",
+    "version": "0.2.2",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.13"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 21,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "files": [
+        {
+          "name": "cup-http-0.2.2.jar",
+          "url": "cup-http-0.2.2.jar",
+          "size": 9650,
+          "sha512": "770f9c94d53eb411b19018a584e93514a4b251503ec12831fd5ae19d7c7b99a71754ff0b03f60f5a902e6552fb24a135a37d807a8f261e5758c7b07a3c1062cd",
+          "sha256": "20f1a98f8467581f3be25e96c699870c0e5d63c142abb7d6d4d659aad3e56aff",
+          "sha1": "16452fb927e6f039e16cf656a0362c5515109b33",
+          "md5": "d5f8cab2950a28e70712c5cc97d0b178"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 21,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "br.dev.rplus",
+          "module": "cup-core",
+          "version": {
+            "requires": "0.2.2"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "cup-http-0.2.2.jar",
+          "url": "cup-http-0.2.2.jar",
+          "size": 9650,
+          "sha512": "770f9c94d53eb411b19018a584e93514a4b251503ec12831fd5ae19d7c7b99a71754ff0b03f60f5a902e6552fb24a135a37d807a8f261e5758c7b07a3c1062cd",
+          "sha256": "20f1a98f8467581f3be25e96c699870c0e5d63c142abb7d6d4d659aad3e56aff",
+          "sha1": "16452fb927e6f039e16cf656a0362c5515109b33",
+          "md5": "d5f8cab2950a28e70712c5cc97d0b178"
+        }
+      ]
+    },
+    {
+      "name": "javadocElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "javadoc",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "cup-http-0.2.2-javadoc.jar",
+          "url": "cup-http-0.2.2-javadoc.jar",
+          "size": 101881,
+          "sha512": "12ebb5057112eaee313599a387e6e3b9a5602a787325921f06da998dc48db6e551c1402129702f4b68b38c046c87a6e94724cbb386c2a59c3553c2526a990228",
+          "sha256": "37d395d7d412d32d863814f4efd286b3a4f83f281423a2f8696186337d10704b",
+          "sha1": "b6ff28edf33f3d22f32d0a74b6e3d305810054f5",
+          "md5": "1b9a55ee8a63904c3b9fb3b31937a4aa"
+        }
+      ]
+    },
+    {
+      "name": "sourcesElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "cup-http-0.2.2-sources.jar",
+          "url": "cup-http-0.2.2-sources.jar",
+          "size": 5092,
+          "sha512": "8150a61fc69821df876d8fe6851f023b38b6ae1e60cc23be8625dedcf537c48d874fb5b78a09d2ee00d93e405ade953145272bdd25eb5c4a9b04735a6877c05b",
+          "sha256": "494d72b9e00c4f6468ccdad544021558117e6c9b0a14414f1067205ad64df897",
+          "sha1": "1cf81412d6a48fb6bd2463ee4e06e4cb4478531c",
+          "md5": "d190b749d1125908c73a8c179ccf89ec"
+        }
+      ]
+    }
+  ]
+}

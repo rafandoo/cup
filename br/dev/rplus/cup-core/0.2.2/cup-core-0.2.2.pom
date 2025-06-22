@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <!-- This module was also published with a richer model, Gradle metadata,  -->
+  <!-- which should be used instead. Do not delete the following line which  -->
+  <!-- is to indicate to Gradle or any Gradle module metadata file consumer  -->
+  <!-- that they should prefer consuming it instead. -->
+  <!-- do_not_remove: published-with-gradle-metadata -->
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>br.dev.rplus</groupId>
+  <artifactId>cup-core</artifactId>
+  <version>0.2.2</version>
+  <name>cup-core</name>
+  <description>Coffee Utilities Package (CUP) is a Java library that provides a set of utilities for Java developers.</description>
+  <url>https://github.com/rafandoo/cup</url>
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>https://raw.githubusercontent.com/rafandoo/cup/refs/heads/main/LICENSE</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <developers>
+    <developer>
+      <id>rafandoo</id>
+      <name>Rafael Camargo</name>
+      <email>rafaelcamargo.info@gmail.com</email>
+    </developer>
+  </developers>
+  <scm>
+    <connection>scm:git:git://github.com/rafandoo/cup.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/rafandoo/cup.git</developerConnection>
+    <url>https://github.com/rafandoo/cup</url>
+  </scm>
+  <dependencies>
+    <dependency>
+      <groupId>org.json</groupId>
+      <artifactId>json</artifactId>
+      <version>20250517</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.yaml</groupId>
+      <artifactId>snakeyaml</artifactId>
+      <version>2.4</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.github.f4b6a3</groupId>
+      <artifactId>uuid-creator</artifactId>
+      <version>6.1.1</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.github.f4b6a3</groupId>
+      <artifactId>ulid-creator</artifactId>
+      <version>5.2.3</version>
+      <scope>runtime</scope>
+    </dependency>
+  </dependencies>
+</project>

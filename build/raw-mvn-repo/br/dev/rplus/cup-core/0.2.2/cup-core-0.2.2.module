@@ -1,0 +1,130 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "br.dev.rplus",
+    "module": "cup-core",
+    "version": "0.2.2",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.13"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 21,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "files": [
+        {
+          "name": "cup-core-0.2.2.jar",
+          "url": "cup-core-0.2.2.jar",
+          "size": 32583,
+          "sha512": "0f639ec88a7bd3053870530f1dfa30de4a3bf792db3d5aced752f7757468316655acc9920c216763f767f6a599889503d3a996e81b7b1ff404262ecaefee958d",
+          "sha256": "7a5a15545b78dab8558b265af3dcaa75f3e8082f896b8e4b8db7c17d160b3597",
+          "sha1": "ca2f2799c8e44a8da9b4f0265bb7d9df3f2ffe13",
+          "md5": "d178782368db3d3ad5b4c4488cf2d37e"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 21,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "org.json",
+          "module": "json",
+          "version": {
+            "requires": "20250517"
+          }
+        },
+        {
+          "group": "org.yaml",
+          "module": "snakeyaml",
+          "version": {
+            "requires": "2.4"
+          }
+        },
+        {
+          "group": "com.github.f4b6a3",
+          "module": "uuid-creator",
+          "version": {
+            "requires": "6.1.1"
+          }
+        },
+        {
+          "group": "com.github.f4b6a3",
+          "module": "ulid-creator",
+          "version": {
+            "requires": "5.2.3"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "cup-core-0.2.2.jar",
+          "url": "cup-core-0.2.2.jar",
+          "size": 32583,
+          "sha512": "0f639ec88a7bd3053870530f1dfa30de4a3bf792db3d5aced752f7757468316655acc9920c216763f767f6a599889503d3a996e81b7b1ff404262ecaefee958d",
+          "sha256": "7a5a15545b78dab8558b265af3dcaa75f3e8082f896b8e4b8db7c17d160b3597",
+          "sha1": "ca2f2799c8e44a8da9b4f0265bb7d9df3f2ffe13",
+          "md5": "d178782368db3d3ad5b4c4488cf2d37e"
+        }
+      ]
+    },
+    {
+      "name": "javadocElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "javadoc",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "cup-core-0.2.2-javadoc.jar",
+          "url": "cup-core-0.2.2-javadoc.jar",
+          "size": 184423,
+          "sha512": "234e97ea347eabb1d970283f13251cae4ce2605c051c8eb32c32717ba0e9c3d2d091228bd579e0b3a31cc2ef5ca62e7a8a1ecc9cfe277758360eb2f6aabf4546",
+          "sha256": "8e939e3aff40d627dae1916d5cdd3aad790fe3b01e8a669e6540a2a89787dbad",
+          "sha1": "74123752612e4193e17f5fc121635f6a0de1a85e",
+          "md5": "8a5643e62a3aa70deecf75fc92bbfd38"
+        }
+      ]
+    },
+    {
+      "name": "sourcesElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "cup-core-0.2.2-sources.jar",
+          "url": "cup-core-0.2.2-sources.jar",
+          "size": 22054,
+          "sha512": "f82a38405f60dac62f9dccf22ea0f940e418aef75a748514f51744b7f1a7b9364aee70579fc5d7f67dfe0d87f0ba5e9f40ed6fdb8f35b19e75edfaa1d1784be6",
+          "sha256": "92fbd79e1cf36088111ce16c8de33e5a10f96348655f62866eaa68ac5201e964",
+          "sha1": "dd3e52b8a23f62598dff962cf8b5f0cb1f459cf9",
+          "md5": "6905a0c4197289157eec1bf2684e7f14"
+        }
+      ]
+    }
+  ]
+}
