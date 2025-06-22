@@ -69,7 +69,7 @@ public class Logger {
     }
 
     /**
-     * Initializes the logger with a custom identifier and an option to log to a file.
+     * Initializes the logger with a custom identifier and a specified log level.
      *
      * @param application logger identifier.
      * @param level       log level (e.g., "INFO", "DEBUG").
@@ -78,12 +78,19 @@ public class Logger {
         this.init(application, level, false);
     }
 
+    /**
+     * Initializes the logger with a custom identifier, a specified log level and an option to use a custom console handler.
+     *
+     * @param application      logger identifier.
+     * @param level            log level (e.g., "INFO", "DEBUG").
+     * @param useCustomHandler indicates whether to use a custom console handler.
+     */
     public void init(String application, String level, boolean useCustomHandler) {
         this.init(application, level, useCustomHandler, false);
     }
 
     /**
-     * Initializes the logger with a custom identifier, an option to log to a file, and a specified log level.
+     * Initializes the logger with a custom identifier, a specified log level, an option to use a custom console handler and an option to write the log to a file.
      *
      * @param application      logger identifier.
      * @param level            log level (e.g., "INFO", "DEBUG").
