@@ -45,7 +45,7 @@ public class Logger {
      *
      * @return the LoggerCup instance.
      */
-    public static Logger getInstance() {
+    public synchronized static Logger getInstance() {
         if (instance == null) {
             instance = new Logger();
         }
