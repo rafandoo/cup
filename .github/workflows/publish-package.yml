@@ -50,7 +50,15 @@ jobs:
           git fetch origin mvn-repo || git checkout --orphan mvn-repo
           git switch mvn-repo
 
-          rm -rf ./*
+          # Remove everything EXCEPT .git and build/
+          find . -mindepth 1 -maxdepth 1 ! -name build ! -name .git -exec rm -rf {} +
+
+          # Ensure directory exists
+          if [ ! -d build/raw-mvn-repo ]; then
+            echo "::error ::Directory 'build/raw-mvn-repo' not found!"
+            exit 1
+          fi
+
           cp -r build/raw-mvn-repo/* ./
 
           git add .
