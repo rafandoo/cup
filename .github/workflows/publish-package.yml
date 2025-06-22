@@ -1,13 +1,15 @@
 name: Publish package to GitHub Packages
+
 on:
   push:
     tags:
       - '*'
+
 jobs:
   publish:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       packages: write
     steps:
       - uses: actions/checkout@v4
@@ -20,7 +22,31 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      - name: Install dependencies
+        run: ./gradlew dependencies
+
+      - name: Build project
+        run: ./gradlew clean build
+
       - name: Publish package
         run: ./gradlew publish
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
+
+      - name: Export raw Maven repository
+        run: ./gradlew exportToRawMaven
+
+      - name: Publish raw Maven repo to `mvn-repo` branch
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email github-actions[bot]@users.noreply.github.com
+
+          git fetch origin mvn-repo || git checkout --orphan mvn-repo
+          git switch mvn-repo
+
+          rm -rf ./*
+          cp -r build/raw-mvn-repo/* ./
+
+          git add .
+          git commit -m ":rocket: Publish Maven repo from tag $GITHUB_REF" || echo "No changes to commit"
+          git push origin mvn-repo

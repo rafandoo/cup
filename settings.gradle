@@ -1,9 +1,10 @@
 pluginManagement {
     repositories {
+        mavenLocal()
         mavenCentral()
         gradlePluginPortal()
-        mavenLocal()
     }
 }
 
 rootProject.name = 'cup'
+include('cup-core', 'cup-http', 'cup-objects')

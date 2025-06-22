@@ -1,10 +1,8 @@
 <h1 align="center">Coffee Utilities Package ☕</h1>
 
-> Project Status: ⏳ In progress
-
 > Documentation: [📖 JavaDoc](https://rafandoo.github.io/cup/)
 
-## 📝 Project description 
+## 📝 Project description
 
 <p align="justify">
 Coffee Utilities Package (CUP) is a Java library that provides a set of utilities for Java developers. The main 
@@ -13,7 +11,7 @@ used in various contexts. The project is divided into modules, each of which pro
 context. The modules are independent of each other, so you can use only the modules you need in your project. The 
 project is open source and is available on GitHub. You can contribute to the project by submitting bug reports, feature 
 requests, or code contributions. The project is licensed under the Apache License 2.0.
-</p ali>
+</p>
 
 ## 🤔 Problem definition
 
@@ -25,42 +23,151 @@ time-consuming and error-prone. The Coffee Utilities Package (CUP) project aims 
 be used by Java developers to perform common tasks more easily and efficiently.
 </p>
 
-## 👨‍💻 Technologies
+## 🛠️ Technologies used
 
 <p align="center">
-    <img src="https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white" alt="Java"/>
+    <img src="https://img.shields.io/badge/Gradle-02303A.svg?style=for-the-badge&logo=gradle&logoColor=white" alt="Gradle"/>
+    <img src="https://img.shields.io/badge/Java-ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white" alt="Java"/>
 </p>
 
-## ⚙️ Configuration 
+## 📦 Installation & Usage
 
-### Development
+### 🧩 Available Modules
 
-To use this project and modify the classes, you must first install the dependencies. To do this, follow these steps:
+This project is modular. You can include the complete package or just specific modules, depending on your needs:
 
-1. Clone the repository to your local machine.
-2. Run the `./gradlew build` command to download the dependencies.
+| Module    | Artifact ID | Description                               |
+|-----------|-------------|-------------------------------------------|
+| core      | cup-core    | General-purpose utilities, logging, enums |
+| http      | cup-http    | HTTP request helpers and URL builder      |
+| objects   | cup-objects | Object serialization, file exporters      |
+| (planned) | cup-files   | File utilities and resource management    |
 
-### External app 
+### ☁️ How to Add to Your Project
 
-To use this project in an external application, you can add the following code snippet to your `build.gradle` file:
+You can include the dependencies in two different ways, depending on your preference:
+
+#### 🔐 Option 1: GitHub Packages (requires authentication)
+
+If you are using Gradle, add the GitHub Packages repository to your `build.gradle`:
 
 ```groovy
+repositories {
+    maven {
+        name = "GitHubPackages"
+        url = uri("https://maven.pkg.github.com/rafandoo/cup")
+        credentials {
+            username = project.findProperty("gpr.user") as String ?: System.getenv("USERNAME")
+            password = project.findProperty("gpr.key") as String ?: System.getenv("TOKEN")
+        }
+    }
+}
+
 dependencies {
-    implementation 'br.dev.rplus:cup:{LAST_VERSION}'
+    implementation 'br.dev.rplus:cup-core:{LAST_VERSION}'
 }
 ```
 
-or in your `pom.xml` file:
+If you are using Maven, add the following to your `pom.xml`:
 
 ```xml
-<dependency>
-    <groupId>br.dev.rplus</groupId>
-    <artifactId>cup</artifactId>
-    <version>{LAST_VERSION}</version>
-</dependency>
+<repositories>
+    <repository>
+        <id>github</id>
+        <url>https://maven.pkg.github.com/rafandoo/cup</url>
+        <snapshots>
+            <enabled>true</enabled>
+        </snapshots>
+        <releases>
+            <enabled>true</enabled>
+        </releases>
+    </repository>
+</repositories>
+
+<dependencies>
+    <dependency>
+        <groupId>br.dev.rplus</groupId>
+        <artifactId>cup-core</artifactId>
+        <version>{LAST_VERSION}</version>
+    </dependency>
+</dependencies>
+```
+
+You must also include your GitHub credentials in your `settings.xml`:
+
+```xml
+<settings>
+    <servers>
+        <server>
+            <id>github</id>
+            <username>USERNAME</username>
+            <password>TOKEN</password>
+        </server>
+    </servers>
+</settings>
+```
+
+> ℹ️ Replace {LAST_VERSION} with the latest release (e.g. 1.0.0).
+
+#### 🌐 Option 2: Public Raw Repository (no authentication)
+
+If you don't want to use GitHub Packages, you can use the raw GitHub Pages Maven repository.
+This does not require authentication, and works for public consumption.
+
+For Gradle:
+
+```groovy
+repositories {
+    maven { 
+        url 'https://raw.githubusercontent.com/rafandoo/cup/mvn-repo/' 
+    }
+}
+
+dependencies {
+    implementation 'br.dev.rplus:cup-core:{LAST_VERSION}'
+}
+```
+
+For Maven:
+
+```xml
+<repositories>
+    <repository>
+        <id>github</id>
+        <url>https://raw.githubusercontent.com/rafandoo/cup/mvn-repo/</url>
+        <snapshots>
+            <enabled>true</enabled>
+        </snapshots>
+        <releases>
+            <enabled>true</enabled>
+        </releases>
+    </repository>
+</repositories>
+
+<dependencies>
+    <dependency>
+        <groupId>br.dev.rplus</groupId>
+        <artifactId>cup-core</artifactId>
+        <version>{LAST_VERSION}</version>
+    </dependency>
+</dependencies>
+```
+
+### 🧪 Local Development
+
+Clone the repository and build locally:
+
+```bash
+git clone https://github.com/rafandoo/cup.git
+cd cup
+
+./gradlew dependencies
+./gradlew clean build
 ```
 
 ## 🔧 Functionalities
+
+✔️ General utilities.
 
 ✔️ Environment utilities.
 
@@ -70,13 +177,9 @@ or in your `pom.xml` file:
 
 ✔️ Object serialization and export in different file formats.
 
-✔️ Date and time utilities.
-
 ✔️ Unique identifier generator.
 
-## 👀 Observations
-
-This project is not yet in its final version.
+✔️ Enum utilities.
 
 ## 🚀 Future enhancements
 
@@ -92,4 +195,4 @@ This project is not yet in its final version.
 
 The [Apache License 2.0](https://github.com/rafandoo/cup/blob/87b6388949953738ce3b39148d2628923fe3c139/LICENSE)
 
-Copyright :copyright: 2024 - Rafael Camargo
+Copyright :copyright: 2024-2025 - Rafael Camargo
