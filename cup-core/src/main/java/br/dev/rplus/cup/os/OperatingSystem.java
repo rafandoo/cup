@@ -7,7 +7,6 @@ import lombok.experimental.UtilityClass;
  * Utility class for detecting and interacting with the operating system properties of the host environment.
  */
 @UtilityClass
-@SuppressWarnings("unused")
 public final class OperatingSystem {
 
     /**

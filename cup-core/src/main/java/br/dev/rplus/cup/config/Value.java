@@ -9,7 +9,6 @@ import java.util.Map;
  * A flexible wrapper class that allows dynamic access and type-safe conversion
  * of an underlying value, typically used for parsed configuration entries.
  */
-@SuppressWarnings("unused")
 public class Value {
 
     private final Object value;

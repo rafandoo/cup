@@ -1,5 +1,7 @@
 package br.dev.rplus.cup.utils;
 
+import lombok.experimental.UtilityClass;
+
 import java.text.Normalizer;
 import java.text.Normalizer.Form;
 import java.util.regex.Pattern;
@@ -7,12 +9,8 @@ import java.util.regex.Pattern;
 /**
  * Utility class for common operations on strings, including manipulation, conversion, and validation.
  */
-public class StringUtils {
-
-    /**
-     * Private constructor to prevent instantiation.
-     */
-    private StringUtils() {}
+@UtilityClass
+public final class StringUtils {
 
     /**
      * Checks if a string is null or empty.
@@ -158,10 +156,10 @@ public class StringUtils {
     /**
      * Pads a string to a specified length with a specified character.
      *
-     * @param str        the string to pad.
-     * @param length     the desired length.
-     * @param padChar    the character to use for padding.
-     * @param padLeft    true to pad on the left, false to pad on the right.
+     * @param str     the string to pad.
+     * @param length  the desired length.
+     * @param padChar the character to use for padding.
+     * @param padLeft true to pad on the left, false to pad on the right.
      * @return the padded string.
      */
     public static String pad(String str, int length, char padChar, boolean padLeft) {

@@ -6,25 +6,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-
 /**
  * {@link ConfigSource} implementation for classic {@code .properties} files.
  */
 public class PropertiesConfigSource implements ConfigSource {
 
-    private final InputStream input;
-
-    /**
-     * Creates a new properties config source.
-     *
-     * @param input the input stream of the {@code .properties} file
-     */
-    public PropertiesConfigSource(InputStream input) {
-        this.input = input;
-    }
-
     @Override
-    public Map<String, Object> load() {
+    public Map<String, Object> load(InputStream input) {
         Properties properties = new Properties();
         try {
             properties.load(input);

@@ -1,5 +1,6 @@
 package br.dev.rplus.cup.config.source;
 
+import java.io.InputStream;
 import java.util.Map;
 
 /**
@@ -12,7 +13,8 @@ public interface ConfigSource {
     /**
      * Loads configuration data and returns it as a {@link Map}.
      *
+     * @param input the input stream of the configuration source.
      * @return a map with configuration keys and values
      */
-    Map<String, Object> load();
+    Map<String, Object> load(InputStream input);
 }

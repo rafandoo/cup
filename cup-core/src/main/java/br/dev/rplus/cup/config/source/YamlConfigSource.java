@@ -10,19 +10,8 @@ import java.util.Map;
  */
 public class YamlConfigSource implements ConfigSource {
 
-    private final InputStream input;
-
-    /**
-     * Creates a new YAML config source.
-     *
-     * @param input the input stream of the YAML file
-     */
-    public YamlConfigSource(InputStream input) {
-        this.input = input;
-    }
-
     @Override
-    public Map<String, Object> load() {
+    public Map<String, Object> load(InputStream input) {
         Yaml yaml = new Yaml();
         return yaml.load(input);
     }

@@ -9,7 +9,6 @@ import java.math.BigInteger;
  * Utility class for parsing values to different types.
  */
 @UtilityClass
-@SuppressWarnings("unused")
 public class Parser {
 
     /**

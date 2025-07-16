@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
  * Class to store typed values. Used to store values of different types.
  * Can be used in conjunction with Enums.
  */
-@SuppressWarnings("unused")
 @AllArgsConstructor
 public class TypedValue {
 

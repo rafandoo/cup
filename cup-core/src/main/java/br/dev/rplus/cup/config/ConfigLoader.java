@@ -16,7 +16,6 @@ import java.nio.file.Path;
  * and returns a ready-to-use {@link Config} instance.
  */
 @UtilityClass
-@SuppressWarnings("unused")
 public final class ConfigLoader {
 
     /**
@@ -34,7 +33,6 @@ public final class ConfigLoader {
         }
     }
 
-
     /**
      * Loads a configuration file from a string path.
      *
@@ -49,21 +47,32 @@ public final class ConfigLoader {
      * Loads configuration data from an {@link InputStream}, inferring
      * the format from the file name.
      *
-     * @param input    the open input stream
-     * @param filename the file name (used only to detect the extension)
-     * @return a populated {@link Config} instance
-     * @throws IllegalArgumentException if the file type is unsupported
+     * @param input    the open input stream.
+     * @param filename the file name (used only to detect the extension).
+     * @return a populated {@link Config} instance.
+     * @throws IllegalArgumentException if the file type is unsupported.
      */
     public static Config from(InputStream input, String filename) {
         ConfigSource source;
         if (filename.endsWith(".yml") || filename.endsWith(".yaml")) {
-            source = new YamlConfigSource(input);
+            source = new YamlConfigSource();
         } else if (filename.endsWith(".properties")) {
-            source = new PropertiesConfigSource(input);
+            source = new PropertiesConfigSource();
         } else {
             throw new IllegalArgumentException("Formato de arquivo não suportado: " + filename);
         }
 
-        return new Config(source.load());
+        return new Config(source.load(input));
+    }
+
+    /**
+     * Loads configuration data from an {@link InputStream}.
+     *
+     * @param input  the open input stream.
+     * @param source the {@link ConfigSource} to use.
+     * @return a populated {@link Config} instance.
+     */
+    public static Config from(InputStream input, ConfigSource source) {
+        return new Config(source.load(input));
     }
 }

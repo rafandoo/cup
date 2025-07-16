@@ -6,6 +6,7 @@ import com.github.f4b6a3.uuid.UuidCreator;
 import com.github.f4b6a3.uuid.enums.UuidLocalDomain;
 import com.github.f4b6a3.uuid.enums.UuidNamespace;
 import com.github.f4b6a3.uuid.util.UuidValidator;
+import lombok.experimental.UtilityClass;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -14,12 +15,8 @@ import java.util.UUID;
  * The {@code UniqueIdentifiers} class provides a set of static methods for generating
  * various types of unique identifiers, including UUIDs (Versions 1 to 7) and ULIDs.
  */
-public class UniqueIdentifiers {
-
-    /**
-     * Private constructor to prevent instantiation.
-     */
-    private UniqueIdentifiers() {}
+@UtilityClass
+public final class UniqueIdentifiers {
 
     /**
      * Generates a time-based UUID (Version 1).

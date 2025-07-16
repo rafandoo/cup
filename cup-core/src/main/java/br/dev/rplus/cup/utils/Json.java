@@ -1,8 +1,9 @@
 package br.dev.rplus.cup.utils;
 
+import lombok.experimental.UtilityClass;
 import org.json.JSONArray;
-import org.json.JSONObject;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Map;
 
@@ -10,13 +11,8 @@ import java.util.Map;
  * Utility class for working with JSON data. Provides methods to convert between JSON strings
  * and Java objects, as well as to validate and format JSON data.
  */
-@SuppressWarnings("unused")
-public class Json {
-
-    /**
-     * Private constructor to prevent instantiation.
-     */
-    private Json() {}
+@UtilityClass
+public final class Json {
 
     /**
      * Converts a {@link Map} to a JSON string.
