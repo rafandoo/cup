@@ -50,8 +50,8 @@ jobs:
           git fetch origin mvn-repo || git checkout --orphan mvn-repo
           git switch mvn-repo
 
-          # Remove everything EXCEPT .git and build/
-          find . -mindepth 1 -maxdepth 1 ! -name build ! -name .git -exec rm -rf {} +
+          # Remove everything EXCEPT .git, build/ and br/
+          find . -mindepth 1 -maxdepth 1 ! -name build ! -name .git ! -name br/ -exec rm -rf {} +
 
           # Ensure directory exists
           if [ ! -d build/raw-mvn-repo ]; then
@@ -60,6 +60,7 @@ jobs:
           fi
 
           cp -r build/raw-mvn-repo/* ./
+          rm -fr build/
 
           git add .
           git commit -m ":rocket: Publish Maven repo from tag $GITHUB_REF" || echo "No changes to commit"
