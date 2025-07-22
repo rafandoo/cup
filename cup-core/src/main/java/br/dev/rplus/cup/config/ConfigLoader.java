@@ -29,7 +29,23 @@ public final class ConfigLoader {
         try (InputStream input = Files.newInputStream(path)) {
             return from(input, path.toString());
         } catch (IOException e) {
-            throw new RuntimeException("Erro ao abrir arquivo", e);
+            throw new RuntimeException("Error opening configuration file", e);
+        }
+    }
+
+    /**
+     * Loads a configuration file from a {@link Path} using a specific {@link ConfigSource}.
+     *
+     * @param path   the path to the configuration file.
+     * @param source the {@link ConfigSource} to use for loading the configuration.
+     * @return a populated {@link Config} instance.
+     * @throws RuntimeException if an I/O error occurs while opening the file.
+     */
+    public static Config from(Path path, ConfigSource source) {
+        try (InputStream input = Files.newInputStream(path)) {
+            return from(input, source);
+        } catch (IOException e) {
+            throw new RuntimeException("Error opening configuration file", e);
         }
     }
 
@@ -41,6 +57,17 @@ public final class ConfigLoader {
      */
     public static Config from(String path) {
         return from(Path.of(path));
+    }
+
+    /**
+     * Loads a configuration file from a string path using a specific {@link ConfigSource}.
+     *
+     * @param path   the path to the configuration file.
+     * @param source the {@link ConfigSource} to use for loading the configuration.
+     * @return a populated {@link Config} instance.
+     */
+    public static Config from(String path, ConfigSource source) {
+        return from(Path.of(path), source);
     }
 
     /**
@@ -59,7 +86,7 @@ public final class ConfigLoader {
         } else if (filename.endsWith(".properties")) {
             source = new PropertiesConfigSource();
         } else {
-            throw new IllegalArgumentException("Formato de arquivo não suportado: " + filename);
+            throw new IllegalArgumentException("Unsupported file format: " + filename);
         }
 
         return new Config(source.load(input));

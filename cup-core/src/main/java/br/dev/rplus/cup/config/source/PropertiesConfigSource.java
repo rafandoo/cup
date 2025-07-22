@@ -17,7 +17,7 @@ public class PropertiesConfigSource implements ConfigSource {
         try {
             properties.load(input);
         } catch (IOException e) {
-            throw new RuntimeException("Erro ao carregar .properties", e);
+            throw new RuntimeException("Error loading .properties", e);
         }
 
         Map<String, Object> map = new HashMap<>();
