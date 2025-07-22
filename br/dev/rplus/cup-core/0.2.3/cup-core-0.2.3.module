@@ -3,7 +3,7 @@
   "component": {
     "group": "br.dev.rplus",
     "module": "cup-core",
-    "version": "0.2.2",
+    "version": "0.2.3",
     "attributes": {
       "org.gradle.status": "release"
     }
@@ -25,13 +25,13 @@
       },
       "files": [
         {
-          "name": "cup-core-0.2.2.jar",
-          "url": "cup-core-0.2.2.jar",
-          "size": 32583,
-          "sha512": "0f639ec88a7bd3053870530f1dfa30de4a3bf792db3d5aced752f7757468316655acc9920c216763f767f6a599889503d3a996e81b7b1ff404262ecaefee958d",
-          "sha256": "7a5a15545b78dab8558b265af3dcaa75f3e8082f896b8e4b8db7c17d160b3597",
-          "sha1": "ca2f2799c8e44a8da9b4f0265bb7d9df3f2ffe13",
-          "md5": "d178782368db3d3ad5b4c4488cf2d37e"
+          "name": "cup-core-0.2.3.jar",
+          "url": "cup-core-0.2.3.jar",
+          "size": 34380,
+          "sha512": "c618099e2b5957697425c045582756548efe8f77dc00b0b85de15987dbdee3a036b92b1ea6511dd6c47c5961e850aa33c56d2d1732d36f5ef3ef710c6b8dfbc0",
+          "sha256": "b4a83b3daa4e3b32288175682a60e7ad727c067e728ed2e57e19a2d84ae1c3fd",
+          "sha1": "9eab8c43477df7dbf88bae27eeaf6556d6e84c00",
+          "md5": "2de87214044ea217819a9ae901cd5888"
         }
       ]
     },
@@ -72,17 +72,24 @@
           "version": {
             "requires": "5.2.3"
           }
+        },
+        {
+          "group": "com.fasterxml.jackson.core",
+          "module": "jackson-databind",
+          "version": {
+            "requires": "2.19.1"
+          }
         }
       ],
       "files": [
         {
-          "name": "cup-core-0.2.2.jar",
-          "url": "cup-core-0.2.2.jar",
-          "size": 32583,
-          "sha512": "0f639ec88a7bd3053870530f1dfa30de4a3bf792db3d5aced752f7757468316655acc9920c216763f767f6a599889503d3a996e81b7b1ff404262ecaefee958d",
-          "sha256": "7a5a15545b78dab8558b265af3dcaa75f3e8082f896b8e4b8db7c17d160b3597",
-          "sha1": "ca2f2799c8e44a8da9b4f0265bb7d9df3f2ffe13",
-          "md5": "d178782368db3d3ad5b4c4488cf2d37e"
+          "name": "cup-core-0.2.3.jar",
+          "url": "cup-core-0.2.3.jar",
+          "size": 34380,
+          "sha512": "c618099e2b5957697425c045582756548efe8f77dc00b0b85de15987dbdee3a036b92b1ea6511dd6c47c5961e850aa33c56d2d1732d36f5ef3ef710c6b8dfbc0",
+          "sha256": "b4a83b3daa4e3b32288175682a60e7ad727c067e728ed2e57e19a2d84ae1c3fd",
+          "sha1": "9eab8c43477df7dbf88bae27eeaf6556d6e84c00",
+          "md5": "2de87214044ea217819a9ae901cd5888"
         }
       ]
     },
@@ -96,13 +103,13 @@
       },
       "files": [
         {
-          "name": "cup-core-0.2.2-javadoc.jar",
-          "url": "cup-core-0.2.2-javadoc.jar",
-          "size": 184423,
-          "sha512": "234e97ea347eabb1d970283f13251cae4ce2605c051c8eb32c32717ba0e9c3d2d091228bd579e0b3a31cc2ef5ca62e7a8a1ecc9cfe277758360eb2f6aabf4546",
-          "sha256": "8e939e3aff40d627dae1916d5cdd3aad790fe3b01e8a669e6540a2a89787dbad",
-          "sha1": "74123752612e4193e17f5fc121635f6a0de1a85e",
-          "md5": "8a5643e62a3aa70deecf75fc92bbfd38"
+          "name": "cup-core-0.2.3-javadoc.jar",
+          "url": "cup-core-0.2.3-javadoc.jar",
+          "size": 186687,
+          "sha512": "cc4fd738ff888e7723d1839fe26cfc6eed4d327aebae85a82486aa5c9a4d2efe582344681cbb7f5dd176211099502db6015e00e9e84bea65844edd0e57acdac4",
+          "sha256": "ce6ac9fc0bda9948c6db05ab3a9796345b705db83dc25807755f0f1863b978a1",
+          "sha1": "77300605f091c0d9945b4916c361227bf69c36a0",
+          "md5": "b8045bce0d16461429b1e9fcc58c04b1"
         }
       ]
     },
@@ -116,13 +123,13 @@
       },
       "files": [
         {
-          "name": "cup-core-0.2.2-sources.jar",
-          "url": "cup-core-0.2.2-sources.jar",
-          "size": 22054,
-          "sha512": "f82a38405f60dac62f9dccf22ea0f940e418aef75a748514f51744b7f1a7b9364aee70579fc5d7f67dfe0d87f0ba5e9f40ed6fdb8f35b19e75edfaa1d1784be6",
-          "sha256": "92fbd79e1cf36088111ce16c8de33e5a10f96348655f62866eaa68ac5201e964",
-          "sha1": "dd3e52b8a23f62598dff962cf8b5f0cb1f459cf9",
-          "md5": "6905a0c4197289157eec1bf2684e7f14"
+          "name": "cup-core-0.2.3-sources.jar",
+          "url": "cup-core-0.2.3-sources.jar",
+          "size": 22554,
+          "sha512": "1c2644dda8378925e153a019877a82a9c7278f98b074a1a3cc3be1b222ffd6d71fd7acd1500667519986b5dc5abc59a59f2707cf6a83a15981de7f905b8dcf51",
+          "sha256": "91365a89fa4db5226bdbe86cd21fbb7a11824430188b0c5ec90cae91811dae0f",
+          "sha1": "5502b2acb24ea136d93f1c0275647fa661a6ff36",
+          "md5": "1838028219aa287c22c32601b8bf5428"
         }
       ]
     }
