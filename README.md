@@ -161,8 +161,7 @@ Clone the repository and build locally:
 git clone https://github.com/rafandoo/cup.git
 cd cup
 
-./gradlew dependencies
-./gradlew clean build
+./gradlew build
 ```
 
 ## 🔧 Functionalities
@@ -191,8 +190,8 @@ cd cup
 
 ✔️ And more...
 
-## License 🔑
+## 🔑 License
 
 The [Apache License 2.0](https://github.com/rafandoo/cup/blob/87b6388949953738ce3b39148d2628923fe3c139/LICENSE)
 
-Copyright :copyright: 2024-2025 - Rafael Camargo
+Copyright :copyright: 2024-present - Rafael Camargo

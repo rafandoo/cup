@@ -1,12 +1,11 @@
 plugins {
     id 'java'
     id 'maven-publish'
+    id 'br.dev.rplus.versioning' version '1.0.0'
 }
 
-apply from: './version.gradle'
-
 group = 'br.dev.rplus'
-version = loadVersion().getVersion()
+version = versioning.name
 
 ext.defaultManifestAttributes = { Project p ->
     return ['Manifest-Version'      : '1.0',
@@ -71,6 +70,10 @@ subprojects {
         withSourcesJar()
     }
 
+    javadoc {
+        options.addStringOption('Xdoclint:none', '-quiet')
+    }
+
     compileJava {
         options.encoding = 'UTF-8'
         options.compilerArgs << '-parameters'
@@ -118,7 +121,7 @@ subprojects {
                 name = "GitHubPackages"
                 url = uri("https://maven.pkg.github.com/${githubRepository}")
                 credentials {
-                    username = 'rafandoo'
+                    username = "${githubUsername}"
                     password = System.getenv("GITHUB_TOKEN")
                 }
             }
@@ -145,8 +148,6 @@ tasks.register('aggregateJavadoc', Javadoc) { agg ->
     classpath = files(subprojects.collect { it.sourceSets.main.compileClasspath })
 
     destinationDir = file("$buildDir/docs/javadoc")
-
-    options.addStringOption('Xdoclint:none', '-quiet')
 }
 
 tasks.register('fatJar', Jar) {

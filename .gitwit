@@ -1,0 +1,59 @@
+# GitWit configuration file
+# This file defines the rules and options for creating semantic commits.
+# More details at https://rafandoo.github.io/gitwit/
+
+---
+
+types:
+  description: "Select the type of change you're committing"
+  values:
+    ✨: "A new feature"
+    🐛: "A bug fix"
+    📝: "Documentation only changes"
+    🎨: "Changes that do not affect the meaning of the code (e.g. formatting)"
+    ♻️: "Code changes that neither fix a bug nor add a feature"
+    ✅: "Adding or correcting tests"
+    🧹: "Other changes that don't modify src or test files"
+    👷: "Continuous Integration changes"
+    📦: "Changes that affect the build system or external dependencies"
+    ⏪️: "Revert to a previous commit"
+    ⬆️: "Dependency upgrades"
+    ⬇️: "Dependency downgrades"
+    🔥: "Removing code or files"
+    🔒: "Security-related changes"
+    🌐: "Internationalization or localization"
+
+scope:
+  description: "Specify the scope of the change (e.g. component or module)"
+  required: false
+  type: text
+
+shortDescription:
+  description: "Provide a short summary of the change (imperative, present tense)"
+  required: true
+  minLength: 5
+  maxLength: 70
+
+breakingChanges:
+  enabled: true
+  description: "List any breaking changes and their impact"
+
+changelog:
+  title: "Changelog"
+  types:
+    ✨: "New features"
+    🐛: "Bug fixes"
+    ♻️: "Code refactoring"
+    📝: "Documentation updates"
+    ✅: "Tests added or updated"
+    🔒: "Security fixes"
+  showOtherTypes: true
+  showBreakingChanges: true
+  ignored:
+    - 🧹
+    - 👷
+  format:
+    sectionTemplate: "{scope}: {description} ({shortHash})"
+    breakingChangesTemplate: "{type} ({scope})!: {description} ({shortHash})"
+    otherTypesTemplate: "{type} ({scope}): {description} ({shortHash})"
+    defaultTemplate: "{type}: {description}"

@@ -3,42 +3,48 @@ name: Publish Javadoc to GitHub Pages
 on:
   push:
     tags:
-      - '*'
+      - 'v*'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
 
 jobs:
-  build-and-publish-javadoc:
+  build-javadoc:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          java-version: '21'
-          distribution: 'temurin'
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@ac638b010cf58a27ee6c972d7336334ccaf61c96 # v4.4.1
-
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+      - uses: ./.github/actions/setup-env
 
       - name: Build project and generate Javadoc
         run: |
           ./gradlew clean aggregateJavadoc
 
-      - name: Commit changes
-        run: |
-          git config user.name github-actions[bot]
-          git config user.email github-actions[bot]@users.noreply.github.com
-          git add -A
-          git commit -m ":memo: Deploy id ${{ github.run_id }}" || true
-
-      - name: Deploy Javadoc to gh-pages
-        uses: peaceiris/actions-gh-pages@v4
+      - name: Upload Javadoc
+        uses: actions/upload-pages-artifact@v4
         with:
-          publish_dir: ./build/docs/javadoc
-          github_token: ${{ secrets.TOKEN }}
-          commit_message: ":memo: Deploy id ${{ github.run_id }} | "
+          path: 'build/docs/javadoc'
+
+  deploy-javadoc:
+    name: Deploy
+    needs: build-javadoc
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

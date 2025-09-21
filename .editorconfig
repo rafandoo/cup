@@ -1,6 +1,6 @@
 root = true
 
-[*.{java,gradle,yml,yaml,md}]
+[*.{java,gradle}]
 charset = utf-8
 indent_size = 4
 indent_style = space
@@ -8,8 +8,13 @@ end_of_line = lf
 insert_final_newline = true
 trim_trailing_whitespace = true
 
-[*.{yml,yaml,toml}]
+[*.{toml,md,gitwit}]
 indent_size = 2
+charset = utf-8
+indent_style = space
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
 
 [*.md]
 max_line_length = off
