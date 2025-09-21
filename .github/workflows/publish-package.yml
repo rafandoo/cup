@@ -56,6 +56,7 @@ jobs:
           # Remove everything EXCEPT .git, build/ and br/
           find . -mindepth 1 -maxdepth 1 ! -name build ! -name .git ! -name br/ -exec rm -rf {} +
 
+          # Ensure directory exists
           if [ ! -d build/raw-mvn-repo ]; then
             echo "::error ::Directory 'build/raw-mvn-repo' not found!"
             exit 1
