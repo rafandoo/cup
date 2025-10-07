@@ -1,9 +1,9 @@
 name: Publish Javadoc to GitHub Pages
 
 on:
-  push:
-    tags:
-      - 'v*'
+  release:
+    types: [ published ]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -36,12 +36,15 @@ jobs:
   deploy-javadoc:
     name: Deploy
     needs: build-javadoc
+
     permissions:
       pages: write
       id-token: write
+
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+
     runs-on: ubuntu-latest
 
     steps:

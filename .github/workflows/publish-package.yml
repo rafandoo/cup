@@ -1,13 +1,12 @@
-name: Publish package to GitHub Packages
+name: Publish package to Maven Central
 
 on:
-  push:
-    tags:
-      - 'v*'
+  release:
+    types: [ published ]
+  workflow_dispatch:
 
 permissions:
-  contents: write
-  packages: write
+  contents: read
 
 concurrency:
   group: deploy
@@ -16,6 +15,7 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
@@ -24,47 +24,12 @@ jobs:
         uses: ./.github/actions/setup-env
 
       - name: Build project
-        run: ./gradlew build
+        run: ./gradlew clean build
 
-      - name: Publish package to GitHub Packages
+      - name: Publish package to Maven Central
         run: ./gradlew publish
         env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
-
-  export-mvn-repo:
-    runs-on: ubuntu-latest
-    needs: deploy
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v5
-
-      - name: Setup environment
-        uses: ./.github/actions/setup-env
-
-      - name: Export raw Maven repository
-        run: ./gradlew exportToRawMaven
-
-      - name: Publish raw Maven repo to `mvn-repo` branch
-        shell: bash
-        run: |
-          git config user.name github-actions[bot]
-          git config user.email github-actions[bot]@users.noreply.github.com
-
-          git fetch origin mvn-repo || git checkout --orphan mvn-repo
-          git switch mvn-repo
-
-          # Remove everything EXCEPT .git, build/ and br/
-          find . -mindepth 1 -maxdepth 1 ! -name build ! -name .git ! -name br/ -exec rm -rf {} +
-
-          # Ensure directory exists
-          if [ ! -d build/raw-mvn-repo ]; then
-            echo "::error ::Directory 'build/raw-mvn-repo' not found!"
-            exit 1
-          fi
-
-          cp -r build/raw-mvn-repo/* ./
-          rm -fr build/
-
-          git add .
-          git commit -m ":rocket: Publish Maven repo from tag $GITHUB_REF" || echo "No changes to commit"
-          git push origin mvn-repo
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.OSSRH_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.OSSRH_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_KEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}

@@ -46,3 +46,6 @@ bin/
 *.tmp
 .cmd/
 artifacts/
+
+# Key
+*.asc

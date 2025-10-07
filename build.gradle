@@ -1,58 +1,66 @@
 plugins {
     id 'java'
-    id 'maven-publish'
-    id 'br.dev.rplus.versioning' version '1.0.0'
+    id 'com.vanniktech.maven.publish' version '0.34.0'
+    id 'dev.rafandoo.versioning' version '1.0.0'
 }
 
-group = 'br.dev.rplus'
+group = 'dev.rafandoo'
 version = versioning.name
 
 ext.defaultManifestAttributes = { Project p ->
-    return ['Manifest-Version'      : '1.0',
-            'Specification-Version' : p.version,
-            'Specification-Vendor'  : 'R+ Dev',
-            'Implementation-Version': p.version,
-            'Implementation-Vendor' : 'R+ Dev',
-            'Built-Date'            : new Date().toString(),
-            'Built-JDK'             : System.getProperty('java.version'),
-            'Built-OS'              : System.getProperty('os.name'),
-            'Built-OS-Version'      : System.getProperty('os.version'),
-            'Built-OS-Architecture' : System.getProperty('os.arch')]
+    return [
+        'Manifest-Version'      : '1.0',
+        'Specification-Version' : p.version,
+        'Specification-Vendor'  : 'R+ Dev',
+        'Implementation-Version': p.version,
+        'Implementation-Vendor' : 'R+ Dev',
+        'Built-Date'            : new Date().toString(),
+        'Built-JDK'             : System.getProperty('java.version'),
+        'Built-OS'              : System.getProperty('os.name'),
+        'Built-OS-Version'      : System.getProperty('os.version'),
+        'Built-OS-Architecture' : System.getProperty('os.arch')
+    ]
 }
 
 ext.configurePom = { MavenPublication pub ->
     pub.pom {
-        name = pub.artifactId
-        description = 'Coffee Utilities Package (CUP) is a Java library that provides a set of utilities for Java developers.'
-        url = 'https://github.com/rafandoo/cup'
+        name.set(pub.artifactId)
+        description.set('Coffee Utilities Package (CUP) is a Java library that provides a set of utilities for Java developers.')
+        url.set('https://github.com/rafandoo/cup')
 
         licenses {
             license {
-                name = 'Apache License, Version 2.0'
-                url = 'https://raw.githubusercontent.com/rafandoo/cup/refs/heads/main/LICENSE'
-                distribution = 'repo'
+                name.set('Apache License, Version 2.0')
+                url.set('https://raw.githubusercontent.com/rafandoo/cup/refs/heads/main/LICENSE')
+                distribution.set('repo')
             }
         }
 
         developers {
             developer {
-                id = 'rafandoo'
-                name = 'Rafael Camargo'
-                email = 'rafaelcamargo.info@gmail.com'
+                id.set('rafandoo')
+                name.set('Rafael Camargo')
+                email.set('rafaelcamargo.inf@gmail.com')
             }
         }
 
         scm {
-            connection = 'scm:git:git://github.com/rafandoo/cup.git'
-            developerConnection = 'scm:git:ssh://git@github.com/rafandoo/cup.git'
-            url = 'https://github.com/rafandoo/cup'
+            connection.set('scm:git:git://github.com/rafandoo/cup.git')
+            developerConnection.set('scm:git:ssh://git@github.com/rafandoo/cup.git')
+            url.set('https://github.com/rafandoo/cup')
+            tag.set('HEAD')
+        }
+
+        issueManagement {
+            system.set('GitHub Issues')
+            url.set('https://github.com/rafandoo/cup/issues')
         }
     }
 }
 
 subprojects {
     apply plugin: 'java'
-    apply plugin: 'maven-publish'
+    apply plugin: 'com.vanniktech.maven.publish'
 
     group = rootProject.group
     version = rootProject.version
@@ -65,9 +73,6 @@ subprojects {
     java {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
-
-        withJavadocJar()
-        withSourcesJar()
     }
 
     javadoc {
@@ -86,6 +91,8 @@ subprojects {
     layout.buildDirectory.set(new File("$projectDir/build"))
 
     dependencies {
+        implementation 'org.slf4j:slf4j-api:2.0.17'
+
         compileOnly("org.projectlombok:lombok:1.18.42")
         annotationProcessor("org.projectlombok:lombok:1.18.42")
 
@@ -95,76 +102,64 @@ subprojects {
 
     tasks.withType(Jar).configureEach {
         manifest {
-            attributes defaultManifestAttributes(project) + ['Specification-Title' : "Coffee Utilities Package - ${project.name.replace('cup-', '').toUpperCase()}",
-                                                             'Implementation-Title': "Coffee Utilities Package - ${project.name.replace('cup-', '').toUpperCase()}"]
+            attributes defaultManifestAttributes(project) + [
+                'Specification-Title' : "Coffee Utilities Package - ${project.name.replace('cup-', '').toUpperCase()}",
+                'Implementation-Title': "Coffee Utilities Package - ${project.name.replace('cup-', '').toUpperCase()}"
+            ]
         }
         exclude '**/.gitkeep'
     }
 
-    tasks.register('copyJarToRoot', Copy) {
-        dependsOn tasks.named('jar')
-        from tasks.named('jar').flatMap { it.archiveFile }
-        into rootProject.file('artifacts')
-    }
-
-    tasks.named('build') { finalizedBy 'copyJarToRoot' }
-
-    publishing {
-        publications {
-            mavenJava(MavenPublication) {
-                from components.java
-            }
-        }
-
-        repositories {
-            maven {
-                name = "GitHubPackages"
-                url = uri("https://maven.pkg.github.com/${githubRepository}")
-                credentials {
-                    username = "${githubUsername}"
-                    password = System.getenv("GITHUB_TOKEN")
-                }
-            }
-        }
-    }
-}
-
-allprojects {
-    plugins.withId('maven-publish') {
+    plugins.withId('com.vanniktech.maven.publish') {
         publishing {
-            publications.withType(MavenPublication).configureEach { pub -> configurePom(pub)
-            }
+            publications.withType(MavenPublication).configureEach { pub -> configurePom(pub) }
         }
+    }
+
+    mavenPublishing {
+        publishToMavenCentral()
+        signAllPublications()
     }
 }
 
-tasks.register('aggregateJavadoc', Javadoc) { agg ->
+tasks.register('aggregateJavadoc', Javadoc) {
     group = 'Documentation'
-    description = 'Generates aggregate Javadoc for all subprojects'
+    description = 'Generates aggregate Javadoc for all Java subprojects.'
 
-    dependsOn subprojects.collect { it.tasks.named('classes') }
+    dependsOn subprojects.collect { it.tasks.matching { t -> t.name == 'classes' } }
 
-    source subprojects.collect { it.sourceSets.main.allJava }
-    classpath = files(subprojects.collect { it.sourceSets.main.compileClasspath })
+    def javaSubprojects = subprojects.findAll { it.plugins.hasPlugin('java') }
 
-    destinationDir = file("$buildDir/docs/javadoc")
+    source javaSubprojects.collect { it.sourceSets.main.allJava }
+
+    classpath = files(javaSubprojects.collect { it.sourceSets.main.compileClasspath })
+
+    destinationDir = file("${rootProject.buildDir}/docs/javadoc")
+
+    options.encoding = 'UTF-8'
+    options.addStringOption('Xdoclint:none', '-quiet')
+    options.addStringOption('charset', 'UTF-8')
+    options.docTitle = "Coffee Utilities Package (CUP) API"
+    options.windowTitle = "CUP API Documentation"
 }
+
 
 tasks.register('fatJar', Jar) {
     group = 'build'
     description = 'Builds a JAR with dependencies (Fat Jar).'
 
     archiveBaseName.set('cup')
-    archiveVersion.set(project.version)
+    archiveVersion.set(project.version.toString())
     archiveClassifier.set('aio')
 
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
     manifest {
-        attributes defaultManifestAttributes(project) + ['Specification-Title' : "Coffee Utilities Package",
-                                                         'Implementation-Title': "Coffee Utilities Package"]
+        attributes defaultManifestAttributes(project) + [
+            'Specification-Title' : "Coffee Utilities Package",
+            'Implementation-Title': "Coffee Utilities Package"
+        ]
     }
-    exclude '**/.gitkeep'
 
     dependsOn subprojects.collect { it.tasks.named('classes') }
 
@@ -190,9 +185,9 @@ tasks.register('exportToRawMaven', Copy) {
 
     dependsOn subprojects.collect { it.tasks.named('publishToMavenLocal') }
 
-    def localMaven = new File(System.getProperty("user.home"), ".m2/repository/br/dev/rplus")
+    def localMaven = new File(System.getProperty("user.home"), ".m2/repository/dev/rafandoo")
 
     from localMaven
-    into "$buildDir/raw-mvn-repo/br/dev/rplus"
+    into "$layout.buildDirectory/raw-mvn-repo/dev/rafandoo"
 }
 

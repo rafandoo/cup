@@ -23,6 +23,5 @@ jobs:
           sync-labels: true
           configuration-path: .github/labeler.yml
           dot: true
-
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
