@@ -39,7 +39,7 @@ public class HttpResponse {
     public HttpResponse(int statusCode, InputStream body, Map<String, java.util.List<String>> headers, long contentLength) {
         this.statusCode = statusCode;
         this.body = body;
-        this.headers = headers;
+        this.headers = Map.copyOf(headers);
 
         this.contentType = headers.getOrDefault("Content-Type", java.util.List.of("")).stream().findFirst().orElse("");
         this.contentLength = contentLength;

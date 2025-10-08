@@ -1,6 +1,6 @@
 <h1 align="center">Coffee Utilities Package ☕</h1>
 
-> Documentation: [📖 JavaDoc](https://rafandoo.github.io/cup/)
+> Documentation: [📖 JavaDoc](https://rafandoo.dev/cup/)
 
 ## 📝 Project description
 
@@ -45,110 +45,55 @@ This project is modular. You can include the complete package or just specific m
 
 ### ☁️ How to Add to Your Project
 
-You can include the dependencies in two different ways, depending on your preference:
+You can add CUP to your project using Gradle or Maven.
+The artifacts are published under the group ID `dev.rafandoo`, and each module can be added individually.
 
-#### 🔐 Option 1: GitHub Packages (requires authentication)
+#### 🐘 Using Gradle
 
-If you are using Gradle, add the GitHub Packages repository to your `build.gradle`:
+Add the desired module dependency to your `build.gradle`:
 
 ```groovy
-repositories {
-    maven {
-        name = "GitHubPackages"
-        url = uri("https://maven.pkg.github.com/rafandoo/cup")
-        credentials {
-            username = project.findProperty("gpr.user") as String ?: System.getenv("USERNAME")
-            password = project.findProperty("gpr.key") as String ?: System.getenv("TOKEN")
-        }
-    }
-}
-
 dependencies {
-    implementation 'br.dev.rplus:cup-core:{LAST_VERSION}'
+    implementation 'dev.rafandoo:cup-core:{LAST_VERSION}'
 }
 ```
 
-If you are using Maven, add the following to your `pom.xml`:
+If you want to include other modules, simply replace `cup-core` with the desired artifact ID:
+
+```groovy
+dependencies {
+    implementation "dev.rafandoo:cup-http:{LATEST_VERSION}"
+    implementation "dev.rafandoo:cup-objects:{LATEST_VERSION}"
+}
+```
+
+#### 🪶 Using Maven
+
+Add the dependency to your `pom.xml`:
 
 ```xml
-<repositories>
-    <repository>
-        <id>github</id>
-        <url>https://maven.pkg.github.com/rafandoo/cup</url>
-        <snapshots>
-            <enabled>true</enabled>
-        </snapshots>
-        <releases>
-            <enabled>true</enabled>
-        </releases>
-    </repository>
-</repositories>
-
 <dependencies>
     <dependency>
-        <groupId>br.dev.rplus</groupId>
+        <groupId>dev.rafandoo</groupId>
         <artifactId>cup-core</artifactId>
         <version>{LAST_VERSION}</version>
     </dependency>
 </dependencies>
 ```
 
-You must also include your GitHub credentials in your `settings.xml`:
+To include other modules, use the corresponding artifact ID:
 
 ```xml
-<settings>
-    <servers>
-        <server>
-            <id>github</id>
-            <username>USERNAME</username>
-            <password>TOKEN</password>
-        </server>
-    </servers>
-</settings>
-```
-
-> ℹ️ Replace {LAST_VERSION} with the latest release (e.g. 1.0.0).
-
-#### 🌐 Option 2: Public Raw Repository (no authentication)
-
-If you don't want to use GitHub Packages, you can use the raw GitHub Pages Maven repository.
-This does not require authentication, and works for public consumption.
-
-For Gradle:
-
-```groovy
-repositories {
-    maven { 
-        url 'https://raw.githubusercontent.com/rafandoo/cup/mvn-repo/' 
-    }
-}
-
-dependencies {
-    implementation 'br.dev.rplus:cup-core:{LAST_VERSION}'
-}
-```
-
-For Maven:
-
-```xml
-<repositories>
-    <repository>
-        <id>github</id>
-        <url>https://raw.githubusercontent.com/rafandoo/cup/mvn-repo/</url>
-        <snapshots>
-            <enabled>true</enabled>
-        </snapshots>
-        <releases>
-            <enabled>true</enabled>
-        </releases>
-    </repository>
-</repositories>
-
 <dependencies>
     <dependency>
-        <groupId>br.dev.rplus</groupId>
-        <artifactId>cup-core</artifactId>
-        <version>{LAST_VERSION}</version>
+        <groupId>dev.rafandoo</groupId>
+        <artifactId>cup-http</artifactId>
+        <version>{LATEST_VERSION}</version>
+    </dependency>
+    <dependency>
+        <groupId>dev.rafandoo</groupId>
+        <artifactId>cup-objects</artifactId>
+        <version>{LATEST_VERSION}</version>
     </dependency>
 </dependencies>
 ```
