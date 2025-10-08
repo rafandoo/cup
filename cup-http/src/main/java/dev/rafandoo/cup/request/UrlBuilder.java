@@ -40,6 +40,9 @@ public class UrlBuilder {
 
     private boolean built;
 
+    /**
+     * Private constructor to enforce the use of the static builder() method.
+     */
     private UrlBuilder() {
         this.urlBuilder = new StringBuilder();
         this.params = new LinkedHashMap<>();
