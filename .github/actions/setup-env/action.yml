@@ -1,36 +1,36 @@
-name: Setup environment
-description: 'Checkout, Java and Gradle ready for build'
+name: Setup Build Environment
+description: 'Prepare Java and Gradle environment for building the project'
 
 inputs:
   java-version:
-    description: 'Java version'
+    description: 'Version of Java to install (e.g., 17, 21)'
     required: false
     default: '21'
   distribution:
-    description: 'Java distribution'
+    description: 'Java distribution to use (e.g., temurin, zulu, graalvm)'
     required: false
     default: 'temurin'
   publish-scan:
-    description: 'Whether to publish a build scan'
+    description: 'Whether to publish Gradle build scans'
     required: false
     default: 'true'
 
 runs:
   using: composite
   steps:
-    - name: Setup Java
+    - name: ☕ Set Up Java ${{ inputs.java-version }} (${{ inputs.distribution }})
       uses: actions/setup-java@v5
       with:
         java-version: ${{ inputs.java-version }}
         distribution: ${{ inputs.distribution }}
 
-    - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v4
+    - name: Configure Gradle and Build Scan
+      uses: gradle/actions/setup-gradle@v5
       with:
         build-scan-publish: ${{ inputs.publish-scan }}
         build-scan-terms-of-use-url: 'https://gradle.com/terms-of-service'
         build-scan-terms-of-use-agree: 'yes'
 
-    - name: Grant execute permission for gradlew
+    - name: Make Gradle Wrapper Executable
       shell: bash
       run: chmod +x ./gradlew

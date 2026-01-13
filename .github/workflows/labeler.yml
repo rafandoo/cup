@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout Source Code
         uses: actions/checkout@v6
 
       - name: Label Pull Requests
@@ -23,5 +23,6 @@ jobs:
           sync-labels: true
           configuration-path: .github/labeler.yml
           dot: true
+
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
