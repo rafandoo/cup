@@ -1,7 +1,5 @@
 dependencies {
     implementation 'org.json:json:20250517'
     implementation 'org.yaml:snakeyaml:2.5'
-    implementation 'com.github.f4b6a3:uuid-creator:6.1.1'
-    implementation 'com.github.f4b6a3:ulid-creator:5.2.3'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.20.1'
 }
