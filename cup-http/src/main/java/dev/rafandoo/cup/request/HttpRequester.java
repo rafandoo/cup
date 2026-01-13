@@ -1,7 +1,5 @@
 package dev.rafandoo.cup.request;
 
-import dev.rafandoo.cup.utils.UniqueIdentifiers;
-
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -10,6 +8,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Utility class to make HTTP requests.
@@ -173,7 +172,7 @@ public class HttpRequester {
      * @throws IOException if an I/O error occurs while reading files.
      */
     public HttpRequester multipartBody(Map<String, Object> parts, Map<String, File> files) throws IOException {
-        String boundary = "----WebKitFormBoundary" + UniqueIdentifiers.getUUIDv4().toString();
+        String boundary = "----WebKitFormBoundary" + UUID.randomUUID().toString();
         this.headers.put("Content-Type", "multipart/form-data; boundary=" + boundary);
 
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
