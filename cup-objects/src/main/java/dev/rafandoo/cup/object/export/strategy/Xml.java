@@ -1,8 +1,7 @@
-package dev.rafandoo.cup.object.export.strategies;
+package dev.rafandoo.cup.object.export.strategy;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.rafandoo.cup.object.export.ExportStrategy;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -10,31 +9,31 @@ import java.io.File;
 import java.io.FileWriter;
 
 /**
- * JSON export strategy.
+ * {@link ExportStrategy} implementation for exporting objects in XML format.
  *
  * @see ExportStrategy
  */
 @Slf4j
 @NoArgsConstructor
-public class JsonExportStrategy implements ExportStrategy {
+public class Xml implements ExportStrategy {
 
     @Override
     public String getExtension() {
-        return "json";
+        return "xml";
     }
 
     @Override
-    public String getContentType() {
-        return "application/json";
+    public String getMimeType() {
+        return "application/xml";
     }
 
     @Override
     public String export(Object object) {
-        ObjectMapper mapper = new ObjectMapper();
+        XmlMapper mapper = new XmlMapper();
         try {
             return mapper.writeValueAsString(object);
         } catch (JsonProcessingException e) {
-            log.error("Error exporting object to JSON. Error: {}", e.getMessage());
+            log.error("Error exporting object to XML. Error: {}", e.getMessage());
             return null;
         }
     }
@@ -42,12 +41,12 @@ public class JsonExportStrategy implements ExportStrategy {
     @Override
     public void export(Object object, File file) {
         try {
-            String json = this.export(object);
+            String xml = this.export(object);
             FileWriter writer = new FileWriter(file, false);
-            writer.write(json);
+            writer.write(xml);
             writer.close();
         } catch (Exception e) {
-            log.error("Error exporting object to JSON file. Error: {}", e.getMessage());
+            log.error("Error exporting object to XML file. Error: {}", e.getMessage());
         }
     }
 }

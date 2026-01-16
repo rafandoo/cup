@@ -1,131 +1,145 @@
 package dev.rafandoo.cup.object.export;
 
-import dev.rafandoo.cup.object.export.strategies.JsonExportStrategy;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import dev.rafandoo.cup.exception.ExportException;
+import dev.rafandoo.cup.object.export.strategy.ExportStrategy;
+import dev.rafandoo.cup.text.StringValidator;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Objects;
 
 /**
- * Utility class to export data to a file from an object.
+ * Handles exporting objects using a configurable {@link ExportStrategy}.
  */
 @Slf4j
-@Setter
-@NoArgsConstructor
 public class ExportData {
 
-    private ExportStrategy exportStrategy;
-
-    private String filename;
-
-    @Getter
-    private String path;
+    private final ExportStrategy strategy;
+    private final String filename;
+    private final Path directory;
 
     /**
-     * Constructor with export strategy.
+     * Internal constructor used by factory methods.
      *
-     * @param exportStrategy the export strategy to be used.
+     * @param strategy  the export strategy to use (never {@code null}).
+     * @param filename  the output filename (may be {@code null} or blank).
+     * @param directory the output directory (may be {@code null}).
      */
-    public ExportData(ExportStrategy exportStrategy) {
-        this.exportStrategy = exportStrategy;
-    }
-
-    /**
-     * Constructor with export strategy and filename.
-     *
-     * @param exportStrategy the export strategy to be used.
-     * @param filename       the file where the data will be exported.
-     */
-    public ExportData(ExportStrategy exportStrategy, String filename) {
-        this.exportStrategy = exportStrategy;
+    private ExportData(ExportStrategy strategy, String filename, Path directory) {
+        this.strategy = Objects.requireNonNull(strategy, "ExportStrategy must not be null");
         this.filename = filename;
+        this.directory = directory;
     }
 
     /**
-     * Constructor with export strategy, filename and path.
+     * Creates an exporter for the given {@link ExportType}.
      *
-     * @param exportStrategy the export strategy to be used.
-     * @param filename       the file where the data will be exported.
-     * @param path           the path where the file will be saved.
+     * @param type the export type.
+     * @return a configured {@code ExportData} instance.
      */
-    public ExportData(ExportStrategy exportStrategy, String filename, String path) {
-        this.exportStrategy = exportStrategy;
-        this.filename = filename;
-        this.path = path;
-    }
-
-    public ExportStrategy getExportStrategy() {
-        try {
-            if (this.exportStrategy == null) {
-                this.exportStrategy = new JsonExportStrategy();
-            }
-            return exportStrategy;
-        } catch (Exception e) {
-            log.error("Error loading export strategy. Error: {}", e.getMessage());
-            return null;
-        }
-    }
-
-    public void setExportStrategy(ExportStrategy exportStrategy) {
-        this.exportStrategy = exportStrategy;
-    }
-
-    public void setExportStrategy(ExportType exportType) {
-        try {
-            this.exportStrategy = exportType.getStrategyClass().getDeclaredConstructor().newInstance();
-        } catch (Exception e) {
-            log.error("Error setting export strategy. Error: {}", e.getMessage());
-        }
-    }
-
-    public String getFilename() {
-        if (this.filename == null) {
-            this.filename = String.format("export.%s", this.getExportStrategy().getExtension());
-        }
-        if (this.filename.contains(".")) {
-            return this.filename;
-        }
-        return String.format("%s.%s", this.filename, this.getExportStrategy().getExtension());
+    public static ExportData of(ExportType type) {
+        return new ExportData(type.createStrategy(), null, null);
     }
 
     /**
-     * Exports the given object using one of the available strategies to a given file.
+     * Creates an exporter for the given {@link ExportType} and filename.
      *
-     * @param object the object to be exported.
+     * @param type     the export type.
+     * @param filename the output filename (extension optional).
+     * @return a configured {@code ExportData} instance.
      */
-    public void export(Object object) {
-        File file;
+    public static ExportData of(ExportType type, String filename) {
+        return new ExportData(type.createStrategy(), filename, null);
+    }
+
+    /**
+     * Creates an exporter for the given {@link ExportType}, filename and directory.
+     *
+     * @param type      the export type.
+     * @param filename  the output filename (extension optional).
+     * @param directory the output directory path.
+     * @return a fully configured {@code ExportData} instance.
+     */
+    public static ExportData of(ExportType type, String filename, String directory) {
+        Path dir = directory == null ? null : Paths.get(directory);
+        return new ExportData(type.createStrategy(), filename, dir);
+    }
+
+    /**
+     * Creates an exporter using a custom {@link ExportStrategy}.
+     *
+     * @param strategy the export strategy to use.
+     * @return a configured {@code ExportData} instance.
+     */
+    public static ExportData withStrategy(ExportStrategy strategy) {
+        return new ExportData(strategy, null, null);
+    }
+
+    /**
+     * Exports the given object to a file using the configured strategy.
+     *
+     * @param object the object to export.
+     * @return the generated file.
+     * @throws ExportException if the export fails.
+     */
+    public File export(Object object) {
         try {
-            String path = this.getPath();
-            if (path == null) {
-                file = new File(getFilename());
-            } else {
-                if (!path.endsWith("/") && !path.endsWith("\\")) {
-                    path += File.separator;
-                }
-                path += getFilename();
-                file = new File(path);
-            }
-            this.getExportStrategy().export(object, file);
+            File file = this.resolveFile();
+            this.strategy.export(object, file);
+            return file;
         } catch (Exception e) {
-            log.error("Error exporting object. Error: {}", e.getMessage());
+            throw new ExportException("Failed to export object to file", e);
         }
     }
 
     /**
-     * Exports the given object using one of the available strategies to a String.
+     * Exports the given object to its string representation.
      *
-     * @param object the object to be exported.
-     * @return the exported object as a String.
+     * @param object the object to export.
+     * @return the exported content as string.
+     * @throws ExportException if the export fails.
      */
     public String exportToString(Object object) {
         try {
-            return this.getExportStrategy().export(object);
+            return this.strategy.export(object);
         } catch (Exception e) {
-            log.error("Error exporting object to string. Error: {}", e.getMessage());
-            return null;
+            throw new ExportException("Failed to export object to string", e);
         }
+    }
+
+    /**
+     * Resolves the output file based on directory and filename configuration.
+     *
+     * @return the resolved output file.
+     */
+    private File resolveFile() {
+        String resolvedName = this.resolveFilename();
+
+        if (this.directory == null) {
+            return new File(resolvedName);
+        }
+
+        return this.directory.resolve(resolvedName).toFile();
+    }
+
+    /**
+     * Resolves the output filename using the configured strategy.
+     *
+     * @return the resolved filename.
+     */
+    private String resolveFilename() {
+        String extension = this.strategy.getExtension();
+
+        if (StringValidator.isNullOrBlank(filename)) {
+            return "export." + extension;
+        }
+
+        if (this.filename.contains(".")) {
+            return this.filename;
+        }
+
+        return this.filename + "." + extension;
     }
 }
