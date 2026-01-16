@@ -6,6 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -84,7 +85,7 @@ public final class Json {
      * @throws IllegalArgumentException if the JSON is not a valid array.
      */
     public static List<Object> toList(String json) {
-        if (StringValidator.isNullOrEmpty(json)) return null;
+        if (StringValidator.isNullOrEmpty(json)) return new ArrayList<>();
         return new JSONArray(json).toList();
     }
 
