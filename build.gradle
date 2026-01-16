@@ -2,10 +2,12 @@ plugins {
     id 'java'
     id 'com.vanniktech.maven.publish' version '0.36.0'
     id 'dev.rafandoo.versioning' version '1.0.0'
+    id 'org.jetbrains.dokka' version '2.1.0'
 }
 
 group = 'dev.rafandoo'
 version = versioning.name
+description = 'Coffee Utilities Package (CUP) is a Java library that provides a set of utilities for Java developers.'
 
 ext.defaultManifestAttributes = { Project p ->
     return [
@@ -25,7 +27,7 @@ ext.defaultManifestAttributes = { Project p ->
 ext.configurePom = { MavenPublication pub ->
     pub.pom {
         name.set(pub.artifactId)
-        description.set('Coffee Utilities Package (CUP) is a Java library that provides a set of utilities for Java developers.')
+        description.set(project.description)
         url.set('https://github.com/rafandoo/cup')
 
         licenses {
@@ -58,6 +60,33 @@ ext.configurePom = { MavenPublication pub ->
     }
 }
 
+dependencies {
+    dokka(project(":cup-core:"))
+    dokka(project(":cup-http:"))
+    dokka(project(":cup-objects:"))
+}
+
+allprojects {
+    apply plugin: 'org.jetbrains.dokka'
+
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
+
+    dependencies {
+        dokkaPlugin 'org.jetbrains.dokka:kotlin-as-java-plugin:2.1.0'
+    }
+
+    dokka {
+        pluginsConfiguration {
+            html {
+                footerMessage.set('© 2024-Present Rafael Camargo. All rights reserved.')
+            }
+        }
+    }
+}
+
 subprojects {
     apply plugin: 'java'
     apply plugin: 'com.vanniktech.maven.publish'
@@ -65,18 +94,9 @@ subprojects {
     group = rootProject.group
     version = rootProject.version
 
-    repositories {
-        mavenLocal()
-        mavenCentral()
-    }
-
     java {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
-    }
-
-    javadoc {
-        options.addStringOption('Xdoclint:none', '-quiet')
     }
 
     compileJava {
@@ -91,13 +111,13 @@ subprojects {
     layout.buildDirectory.set(new File("$projectDir/build"))
 
     dependencies {
-        implementation 'org.slf4j:slf4j-api:2.0.17'
+        compileOnly 'org.slf4j:slf4j-api:2.0.17'
 
-        compileOnly("org.projectlombok:lombok:1.18.42")
-        annotationProcessor("org.projectlombok:lombok:1.18.42")
+        compileOnly 'org.projectlombok:lombok:1.18.42'
+        annotationProcessor 'org.projectlombok:lombok:1.18.42'
 
-        testCompileOnly("org.projectlombok:lombok:1.18.42")
-        testAnnotationProcessor("org.projectlombok:lombok:1.18.42")
+        testCompileOnly 'org.projectlombok:lombok:1.18.42'
+        testAnnotationProcessor 'org.projectlombok:lombok:1.18.42'
     }
 
     tasks.withType(Jar).configureEach {
@@ -122,28 +142,6 @@ subprojects {
     }
 }
 
-tasks.register('aggregateJavadoc', Javadoc) {
-    group = 'Documentation'
-    description = 'Generates aggregate Javadoc for all Java subprojects.'
-
-    dependsOn subprojects.collect { it.tasks.matching { t -> t.name == 'classes' } }
-
-    def javaSubprojects = subprojects.findAll { it.plugins.hasPlugin('java') }
-
-    source javaSubprojects.collect { it.sourceSets.main.allJava }
-
-    classpath = files(javaSubprojects.collect { it.sourceSets.main.compileClasspath })
-
-    destinationDir = file("${rootProject.buildDir}/docs/javadoc")
-
-    options.encoding = 'UTF-8'
-    options.addStringOption('Xdoclint:none', '-quiet')
-    options.addStringOption('charset', 'UTF-8')
-    options.docTitle = "Coffee Utilities Package (CUP) API"
-    options.windowTitle = "CUP API Documentation"
-}
-
-
 tasks.register('fatJar', Jar) {
     group = 'build'
     description = 'Builds a JAR with dependencies (Fat Jar).'
@@ -154,40 +152,35 @@ tasks.register('fatJar', Jar) {
 
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
-    manifest {
-        attributes defaultManifestAttributes(project) + [
-            'Specification-Title' : "Coffee Utilities Package",
-            'Implementation-Title': "Coffee Utilities Package"
-        ]
-    }
-
-    dependsOn subprojects.collect { it.tasks.named('classes') }
+    from subprojects.collect { it.sourceSets.main.output }
 
     from {
-        subprojects.collect { it.sourceSets.main.output }
-    }
-
-    dependsOn subprojects.collect { it.configurations.runtimeClasspath }
-    from {
-        subprojects.collectMany { subproject ->
-            subproject.configurations.runtimeClasspath.findAll {
-                it.name.endsWith('.jar')
-            }.collect { zipTree(it) }
+        subprojects.collectMany {
+            it.configurations.runtimeClasspath
+                .filter { it.name.endsWith('.jar') }
+                .collect { zipTree(it) }
         }
     }
 
-    destinationDirectory.set(file("$rootDir/artifacts"))
+    manifest {
+        attributes defaultManifestAttributes(project) + [
+            'Specification-Title' : 'Coffee Utilities Package',
+            'Implementation-Title': 'Coffee Utilities Package'
+        ]
+    }
+
+    destinationDirectory.set(layout.projectDirectory.dir('artifacts'))
 }
 
 tasks.register('exportToRawMaven', Copy) {
     group = 'publishing'
-    description = 'Exports all subprojects to a local Maven repository.'
+    description = 'Exports artifacts from Maven Local.'
 
     dependsOn subprojects.collect { it.tasks.named('publishToMavenLocal') }
 
-    def localMaven = new File(System.getProperty("user.home"), ".m2/repository/dev/rafandoo")
+    def localMaven = new File(System.getProperty('user.home'), '.m2/repository/dev/rafandoo')
 
     from localMaven
-    into "$layout.buildDirectory/raw-mvn-repo/dev/rafandoo"
+    into layout.buildDirectory.dir('raw-mvn-repo/dev/rafandoo')
 }
 
