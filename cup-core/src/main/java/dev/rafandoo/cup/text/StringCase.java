@@ -29,8 +29,8 @@ public final class StringCase {
      * "hello world java" -> "Hello World Java"
      * </pre>
      *
-     * @param str the string to convert
-     * @return the string in title case, or the original string if null or blank
+     * @param str the string to convert.
+     * @return the string in title case, or the original string if null or blank.
      */
     public static String toTitleCase(String str) {
         if (StringValidator.isNullOrBlank(str)) {
@@ -55,8 +55,8 @@ public final class StringCase {
      * "jAVA" -> "Java"
      * </pre>
      *
-     * @param str the string to capitalize
-     * @return the capitalized string, or the original string if null or blank
+     * @param str the string to capitalize.
+     * @return the capitalized string, or the original string if null or blank.
      */
     public static String capitalize(String str) {
         if (StringValidator.isNullOrBlank(str)) {
@@ -75,8 +75,8 @@ public final class StringCase {
      * "hello world java" -> "helloWorldJava"
      * </pre>
      *
-     * @param str the string to convert
-     * @return the string in camelCase, or the original string if null or blank
+     * @param str the string to convert.
+     * @return the string in camelCase, or the original string if null or blank.
      */
     public static String toCamelCase(String str) {
         if (StringValidator.isNullOrBlank(str)) {
@@ -101,8 +101,8 @@ public final class StringCase {
      * "hello world java" -> "HelloWorldJava"
      * </pre>
      *
-     * @param str the string to convert
-     * @return the string in PascalCase, or the original string if null or blank
+     * @param str the string to convert.
+     * @return the string in PascalCase, or the original string if null or blank.
      */
     public static String toPascalCase(String str) {
         if (StringValidator.isNullOrBlank(str)) {
@@ -134,8 +134,8 @@ public final class StringCase {
      * "helloWorld Java" -> "hello_world_java"
      * </pre>
      *
-     * @param str the string to convert
-     * @return the string in snake_case, or the original string if null or blank
+     * @param str the string to convert.
+     * @return the string in snake_case, or the original string if null or blank.
      */
     public static String toSnakeCase(String str) {
         if (StringValidator.isNullOrBlank(str)) {
@@ -156,8 +156,8 @@ public final class StringCase {
      * "HelloWorld Java" -> "hello-world-java"
      * </pre>
      *
-     * @param str the string to convert
-     * @return the string in kebab-case, or the original string if null or blank
+     * @param str the string to convert.
+     * @return the string in kebab-case, or the original string if null or blank.
      */
     public static String toKebabCase(String str) {
         if (StringValidator.isNullOrBlank(str)) {

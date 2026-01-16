@@ -38,8 +38,8 @@ public final class StringNormalizer {
      * "ação" -> "acao"
      * </pre>
      *
-     * @param str the string to process
-     * @return the string without accents, or the original string if null or empty
+     * @param str the string to process.
+     * @return the string without accents, or the original string if null or empty.
      */
     public static String removeAccents(String str) {
         if (StringValidator.isNullOrEmpty(str)) {
@@ -53,8 +53,8 @@ public final class StringNormalizer {
     /**
      * Removes all non-ASCII characters from a string.
      *
-     * @param str the string to process
-     * @return the string containing only ASCII characters, or the original string if null or empty
+     * @param str the string to process.
+     * @return the string containing only ASCII characters, or the original string if null or empty.
      */
     public static String removeNonAscii(String str) {
         if (StringValidator.isNullOrEmpty(str)) {
@@ -70,8 +70,8 @@ public final class StringNormalizer {
      * This is a convenience method that combines
      * {@link #removeAccents(String)} and {@link #removeNonAscii(String)}.
      *
-     * @param str the string to process
-     * @return the normalized string, or the original string if null or empty
+     * @param str the string to process.
+     * @return the normalized string, or the original string if null or empty.
      */
     public static String removeAccentsAndSpecialCharacters(String str) {
         if (StringValidator.isNullOrEmpty(str)) {
@@ -91,8 +91,8 @@ public final class StringNormalizer {
      * "  hello   world  " -> "hello world"
      * </pre>
      *
-     * @param str the string to process
-     * @return the whitespace-normalized string, or the original string if null or empty
+     * @param str the string to process.
+     * @return the whitespace-normalized string, or the original string if null or empty.
      */
     public static String normalizeWhitespace(String str) {
         if (StringValidator.isNullOrEmpty(str)) {
@@ -107,8 +107,8 @@ public final class StringNormalizer {
      * <p>
      * Useful for comparisons, indexing, and search operations.
      *
-     * @param str the string to normalize
-     * @return a fully normalized string, or the original string if null or empty
+     * @param str the string to normalize.
+     * @return a fully normalized string, or the original string if null or empty.
      */
     public static String normalizeForComparison(String str) {
         if (StringValidator.isNullOrEmpty(str)) {
@@ -129,9 +129,9 @@ public final class StringNormalizer {
      * "Olá Mundo Java!" -> "ola-mundo-java"
      * </pre>
      *
-     * @param str       the string to normalize
-     * @param delimiter the delimiter to use between words
-     * @return a normalized identifier, or null if the input is null
+     * @param str       the string to normalize.
+     * @param delimiter the delimiter to use between words.
+     * @return a normalized identifier, or null if the input is null.
      */
     public static String toSlug(String str, String delimiter) {
         if (str == null) {
