@@ -1,6 +1,5 @@
 package dev.rafandoo.cup.os;
 
-import dev.rafandoo.cup.enums.OperatingSystemEnum;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -12,20 +11,20 @@ public final class OperatingSystem {
     /**
      * The name of the operating system, in lowercase.
      */
-    private static final String OS_NAME = System.getProperty(OperatingSystemEnum.PROP_OS_NAME.get().asString()).toLowerCase();
+    private static final String OS_NAME = System.getProperty(OperatingSystemType.PROP_OS_NAME.get().asString()).toLowerCase();
 
     /**
      * The architecture of the operating system, in lowercase.
      */
-    private static final String OS_ARCH = System.getProperty(OperatingSystemEnum.PROP_OS_ARCH.get().asString()).toLowerCase();
+    private static final String OS_ARCH = System.getProperty(OperatingSystemType.PROP_OS_ARCH.get().asString()).toLowerCase();
 
     /**
-     * Checks if the current OS matches the given {@link OperatingSystemEnum} value.
+     * Checks if the current OS matches the given {@link OperatingSystemType} value.
      *
      * @param os the OS to compare against.
      * @return true if the current OS name contains the specified OS string, false otherwise.
      */
-    private static boolean isOS(OperatingSystemEnum os) {
+    private static boolean isOS(OperatingSystemType os) {
         return OS_NAME.contains(os.get().asString());
     }
 
@@ -35,7 +34,7 @@ public final class OperatingSystem {
      * @return true if Windows, false otherwise.
      */
     public static boolean isWindows() {
-        return isOS(OperatingSystemEnum.WINDOWS);
+        return isOS(OperatingSystemType.WINDOWS);
     }
 
     /**
@@ -44,7 +43,7 @@ public final class OperatingSystem {
      * @return true if Linux, false otherwise.
      */
     public static boolean isLinux() {
-        return isOS(OperatingSystemEnum.LINUX);
+        return isOS(OperatingSystemType.LINUX);
     }
 
     /**
@@ -53,7 +52,7 @@ public final class OperatingSystem {
      * @return true if macOS, false otherwise.
      */
     public static boolean isMac() {
-        return isOS(OperatingSystemEnum.MAC);
+        return isOS(OperatingSystemType.MAC);
     }
 
     /**
@@ -62,7 +61,7 @@ public final class OperatingSystem {
      * @return true if Chrome OS, false otherwise.
      */
     public static boolean isChromeOs() {
-        return isOS(OperatingSystemEnum.CHROME_OS);
+        return isOS(OperatingSystemType.CHROME_OS);
     }
 
     /**
@@ -143,6 +142,6 @@ public final class OperatingSystem {
      * @return the OS version.
      */
     public static String getOsVersion() {
-        return System.getProperty(OperatingSystemEnum.PROP_OS_VERSION.get().asString());
+        return System.getProperty(OperatingSystemType.PROP_OS_VERSION.get().asString());
     }
 }

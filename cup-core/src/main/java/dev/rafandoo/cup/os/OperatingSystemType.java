@@ -1,10 +1,12 @@
-package dev.rafandoo.cup.enums;
+package dev.rafandoo.cup.os;
+
+import dev.rafandoo.cup.enums.TypedValue;
 
 /**
  * Enum representing known operating systems and system properties
  * used for OS detection and system information retrieval.
  */
-public enum OperatingSystemEnum {
+public enum OperatingSystemType {
 
     /**
      * Represents the Windows operating system.
@@ -48,7 +50,7 @@ public enum OperatingSystemEnum {
      *
      * @param value the underlying string value representing the OS or system property.
      */
-    OperatingSystemEnum(Object value) {
+    OperatingSystemType(Object value) {
         this.value = new TypedValue(value);
     }
 
