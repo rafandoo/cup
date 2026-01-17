@@ -317,7 +317,7 @@ public class HttpRequester {
     private HttpResponse execute(HttpMethod method) throws IOException {
         try {
             this.method = method;
-            prepareRequest();
+            this.prepareRequest();
             int status = conn.getResponseCode();
             InputStream is = status >= 400 ? conn.getErrorStream() : conn.getInputStream();
             return new HttpResponse(status, is, conn.getHeaderFields(), conn.getContentLength());

@@ -1,4 +1,4 @@
-package dev.rafandoo.cup.utils;
+package dev.rafandoo.cup.parsing;
 
 import lombok.experimental.UtilityClass;
 
@@ -9,7 +9,7 @@ import java.math.BigInteger;
  * Utility class for parsing values to different types.
  */
 @UtilityClass
-public final class Parser {
+public final class TypeParser {
 
     /**
      * Parses the provided value to an integer, if not possible returns 0.
