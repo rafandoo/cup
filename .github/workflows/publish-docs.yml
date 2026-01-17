@@ -1,4 +1,4 @@
-name: Publish Javadoc to GitHub Pages
+name: Publish Documentation to GitHub Pages
 
 on:
   release:
@@ -15,27 +15,27 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build-javadoc:
+  build-docs:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7.0.0
 
       - uses: ./.github/actions/setup-env
 
-      - name: Build project and generate Javadoc
+      - name: Build project and generate Dokka
         run: |
-          ./gradlew clean aggregateJavadoc
+          ./gradlew clean dokkaGenerateHtml
 
-      - name: Upload Javadoc
-        uses: actions/upload-pages-artifact@v5
+      - name: Upload Dokka
+        uses: actions/upload-pages-artifact@v5.0.0
         with:
-          path: 'build/docs/javadoc'
+          path: 'build/dokka/html'
 
-  deploy-javadoc:
+  deploy-docs:
     name: Deploy
-    needs: build-javadoc
+    needs: build-docs
 
     permissions:
       pages: write
@@ -50,4 +50,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v5
+        uses: actions/deploy-pages@v5.0.0
