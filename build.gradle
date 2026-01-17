@@ -82,6 +82,8 @@ allprojects {
         pluginsConfiguration {
             html {
                 footerMessage.set('© 2024-Present Rafael Camargo. All rights reserved.')
+                customAssets.from("$rootDir/resources/dokka/cup.svg")
+                customStyleSheets.from("$rootDir/resources/dokka/logo-styles.css")
             }
         }
     }
