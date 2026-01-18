@@ -1,6 +1,6 @@
 package dev.rafandoo.cup.request;
 
-import dev.rafandoo.cup.text.StringValidator;
+import dev.rafandoo.cup.utils.StringUtils;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -129,7 +129,7 @@ public class UrlBuilder {
      */
     public UrlBuilder addParameter(String key, Object value) {
         this.ensureNotBuilt();
-        if (!StringValidator.isNullOrEmpty(key) && value != null && !StringValidator.isNullOrEmpty(value.toString())) {
+        if (!StringUtils.isNullOrEmpty(key) && value != null && !StringUtils.isNullOrEmpty(value.toString())) {
             this.params.put(key, value);
         }
         return this;
@@ -170,7 +170,7 @@ public class UrlBuilder {
      * Appends the protocol to the URL if it's defined and not already present in the URL.
      */
     private void appendProtocolIfNecessary() {
-        if (!StringValidator.isNullOrEmpty(this.protocol)
+        if (!StringUtils.isNullOrEmpty(this.protocol)
             && (this.url == null || !this.url.contains("://"))) {
             this.urlBuilder.append(this.protocol).append("://");
         }
@@ -180,7 +180,7 @@ public class UrlBuilder {
      * Appends the main URL (host/domain) if defined.
      */
     private void appendUrl() {
-        if (!StringValidator.isNullOrEmpty(this.url)) {
+        if (!StringUtils.isNullOrEmpty(this.url)) {
             this.urlBuilder.append(this.url.replaceAll("/+$", ""));
         }
     }
@@ -198,7 +198,7 @@ public class UrlBuilder {
      * Appends the path to the URL, ensuring that slashes are correctly positioned.
      */
     private void appendPath() {
-        if (!StringValidator.isNullOrEmpty(this.path)) {
+        if (!StringUtils.isNullOrEmpty(this.path)) {
             boolean needsSlash = !this.path.startsWith("/") && !this.urlBuilder.isEmpty()
                 && this.urlBuilder.charAt(this.urlBuilder.length() - 1) != '/';
             if (needsSlash) {
@@ -236,7 +236,7 @@ public class UrlBuilder {
      * Appends the fragment identifier to the URL if defined.
      */
     private void appendFragment() {
-        if (!StringValidator.isNullOrEmpty(this.fragment)) {
+        if (!StringUtils.isNullOrEmpty(this.fragment)) {
             this.urlBuilder.append("#").append(URLEncoder.encode(this.fragment, StandardCharsets.UTF_8));
         }
     }

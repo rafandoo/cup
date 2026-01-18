@@ -19,7 +19,6 @@ import java.util.Map;
  */
 @Getter
 public class HttpResponse {
-
     private final int statusCode;
     private final InputStream body;
     private final Map<String, List<String>> headers;
