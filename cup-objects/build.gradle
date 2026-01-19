@@ -2,8 +2,8 @@ dependencies {
     implementation project(":cup-core")
 
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.20.1'
-    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.20.1'
-    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.20.1'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.21.0'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.21.0'
 
     implementation 'org.json:json:20250517'
     implementation 'org.yaml:snakeyaml:2.5'
