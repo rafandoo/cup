@@ -1,8 +1,7 @@
-package dev.rafandoo.cup.object.export.strategies;
+package dev.rafandoo.cup.object.export.strategy;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.dataformat.csv.CsvMapper;
-import dev.rafandoo.cup.object.export.ExportStrategy;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -10,31 +9,31 @@ import java.io.File;
 import java.io.FileWriter;
 
 /**
- * CSV export strategy.
+ * {@link ExportStrategy} implementation for exporting objects in JSON format.
  *
  * @see ExportStrategy
  */
 @Slf4j
 @NoArgsConstructor
-public class CsvExportStrategy implements ExportStrategy {
+public class Json implements ExportStrategy {
 
     @Override
     public String getExtension() {
-        return "csv";
+        return "json";
     }
 
     @Override
-    public String getContentType() {
-        return "text/csv";
+    public String getMimeType() {
+        return "application/json";
     }
 
     @Override
     public String export(Object object) {
-        CsvMapper mapper = new CsvMapper();
+        ObjectMapper mapper = new ObjectMapper();
         try {
             return mapper.writeValueAsString(object);
         } catch (JsonProcessingException e) {
-            log.error("Error exporting object to CSV. Error: {}", e.getMessage());
+            log.error("Error exporting object to JSON. Error: {}", e.getMessage());
             return null;
         }
     }
@@ -42,12 +41,12 @@ public class CsvExportStrategy implements ExportStrategy {
     @Override
     public void export(Object object, File file) {
         try {
-            String csv = this.export(object);
+            String json = this.export(object);
             FileWriter writer = new FileWriter(file, false);
-            writer.write(csv);
+            writer.write(json);
             writer.close();
         } catch (Exception e) {
-            log.error("Error exporting object to CSV file. Error: {}", e.getMessage());
+            log.error("Error exporting object to JSON file. Error: {}", e.getMessage());
         }
     }
 }

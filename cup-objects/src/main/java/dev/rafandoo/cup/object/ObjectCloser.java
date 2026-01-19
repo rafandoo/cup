@@ -1,5 +1,6 @@
 package dev.rafandoo.cup.object;
 
+import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Field;
@@ -8,13 +9,8 @@ import java.lang.reflect.Field;
  * Utility class to close an object and its fields.
  */
 @Slf4j
-public abstract class ObjectCloser {
-
-    /**
-     * Default constructor.
-     */
-    protected ObjectCloser() {
-    }
+@UtilityClass
+public final class ObjectCloser {
 
     /**
      * Closes an object and its fields.
@@ -73,7 +69,7 @@ public abstract class ObjectCloser {
      * @param object the object whose field will be set to the default value.
      * @throws IllegalAccessException if the field is not accessible.
      */
-    private static void setPrimitiveDefault(Field field, Object object) throws IllegalAccessException {
+    public static void setPrimitiveDefault(Field field, Object object) throws IllegalAccessException {
         Class<?> type = field.getType();
         if (type == boolean.class) {
             field.setBoolean(object, false);
