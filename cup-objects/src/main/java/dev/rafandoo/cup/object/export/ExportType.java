@@ -1,42 +1,43 @@
 package dev.rafandoo.cup.object.export;
 
-import dev.rafandoo.cup.object.export.strategies.CsvExportStrategy;
-import dev.rafandoo.cup.object.export.strategies.JsonExportStrategy;
-import dev.rafandoo.cup.object.export.strategies.XmlExportStrategy;
-import lombok.Getter;
+import dev.rafandoo.cup.object.export.strategy.Csv;
+import dev.rafandoo.cup.object.export.strategy.ExportStrategy;
+import dev.rafandoo.cup.object.export.strategy.Json;
+import dev.rafandoo.cup.object.export.strategy.Xml;
 
 /**
- * Enum for export types (export strategies).
+ * Defines the supported export formats and acts as a factory for
+ * their corresponding {@link ExportStrategy} implementations.
  *
  * @see ExportStrategy
  */
-@Getter
 public enum ExportType {
 
-    /**
-     * JSON export strategy.
-     */
-    JSON(JsonExportStrategy.class),
+    JSON {
+        @Override
+        public ExportStrategy createStrategy() {
+            return new Json();
+        }
+    },
+
+    XML {
+        @Override
+        public ExportStrategy createStrategy() {
+            return new Xml();
+        }
+    },
+
+    CSV {
+        @Override
+        public ExportStrategy createStrategy() {
+            return new Csv();
+        }
+    };
 
     /**
-     * XML export strategy.
-     */
-    XML(XmlExportStrategy.class),
-
-    /**
-     * CSV export strategy.
-     */
-    CSV(CsvExportStrategy.class);
-
-    private final Class<? extends ExportStrategy> strategyClass;
-
-    /**
-     * Default constructor.
+     * Creates a new instance of the corresponding {@link ExportStrategy}.
      *
-     * @param strategyClass the class of the export strategy.
+     * @return a new export strategy instance.
      */
-    ExportType(Class<? extends ExportStrategy> strategyClass) {
-        this.strategyClass = strategyClass;
-    }
-
+    public abstract ExportStrategy createStrategy();
 }
