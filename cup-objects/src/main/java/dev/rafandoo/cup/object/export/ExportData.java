@@ -34,47 +34,52 @@ public class ExportData {
     }
 
     /**
-     * Creates an exporter for the given {@link ExportType}.
+     * Instantiates the given {@link ExportStrategy} class.
      *
-     * @param type the export type.
-     * @return a configured {@code ExportData} instance.
+     * @param strategy the export strategy class to instantiate.
+     * @return a new instance of the specified export strategy.
+     * @throws ExportException if instantiation fails.
      */
-    public static ExportData of(ExportType type) {
-        return new ExportData(type.createStrategy(), null, null);
+    private static ExportStrategy instantiateStrategy(Class<? extends ExportStrategy> strategy) {
+        try {
+            return strategy.getDeclaredConstructor().newInstance();
+        } catch (Exception e) {
+            throw new ExportException("Failed to instantiate export strategy", e);
+        }
     }
 
     /**
-     * Creates an exporter for the given {@link ExportType} and filename.
-     *
-     * @param type     the export type.
-     * @param filename the output filename (extension optional).
-     * @return a configured {@code ExportData} instance.
-     */
-    public static ExportData of(ExportType type, String filename) {
-        return new ExportData(type.createStrategy(), filename, null);
-    }
-
-    /**
-     * Creates an exporter for the given {@link ExportType}, filename and directory.
-     *
-     * @param type      the export type.
-     * @param filename  the output filename (extension optional).
-     * @param directory the output directory path.
-     * @return a fully configured {@code ExportData} instance.
-     */
-    public static ExportData of(ExportType type, String filename, String directory) {
-        Path dir = directory == null ? null : Paths.get(directory);
-        return new ExportData(type.createStrategy(), filename, dir);
-    }
-
-    /**
-     * Creates an exporter using a custom {@link ExportStrategy}.
+     * Creates an exporter for the given {@link ExportStrategy}.
      *
      * @param strategy the export strategy to use.
      * @return a configured {@code ExportData} instance.
      */
-    public static ExportData withStrategy(ExportStrategy strategy) {
-        return new ExportData(strategy, null, null);
+    public static ExportData of(Class<? extends ExportStrategy> strategy) {
+        return new ExportData(instantiateStrategy(strategy), null, null);
+    }
+
+    /**
+     * Creates an exporter for the given {@link ExportStrategy} and filename.
+     *
+     * @param strategy the export strategy to use.
+     * @param filename the output filename (extension optional).
+     * @return a configured {@code ExportData} instance.
+     */
+    public static ExportData of(Class<? extends ExportStrategy> strategy, String filename) {
+        return new ExportData(instantiateStrategy(strategy), filename, null);
+    }
+
+    /**
+     * Creates an exporter for the given {@link ExportStrategy}, filename and directory.
+     *
+     * @param strategy  the export strategy to use.
+     * @param filename  the output filename (extension optional).
+     * @param directory the output directory path.
+     * @return a fully configured {@code ExportData} instance.
+     */
+    public static ExportData of(Class<? extends ExportStrategy> strategy, String filename, String directory) {
+        Path dir = directory == null ? null : Paths.get(directory);
+        return new ExportData(instantiateStrategy(strategy), filename, dir);
     }
 
     /**
