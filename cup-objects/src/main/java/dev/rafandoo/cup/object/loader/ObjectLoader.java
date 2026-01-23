@@ -45,7 +45,7 @@ public final class ObjectLoader {
      * @return a populated {@link ObjectTree} representing the parsed document.
      * @throws RuntimeException if an I/O error occurs or the source cannot be instantiated.
      */
-    public static ObjectTree from(Path path, Class<ObjectSource> source) {
+    public static ObjectTree from(Path path, Class<? extends ObjectSource> source) {
         try (InputStream input = Files.newInputStream(path)) {
             return from(input, source);
         } catch (IOException e) {
@@ -74,7 +74,7 @@ public final class ObjectLoader {
      * @return a populated {@link ObjectTree} representing the parsed document.
      * @throws RuntimeException if the source cannot be instantiated.
      */
-    public static ObjectTree from(String path, Class<ObjectSource> source) {
+    public static ObjectTree from(String path, Class<? extends ObjectSource> source) {
         return from(Path.of(path), source);
     }
 
@@ -122,7 +122,7 @@ public final class ObjectLoader {
      * @return a populated {@link ObjectTree} representing the parsed document.
      * @throws RuntimeException if the source cannot be instantiated.
      */
-    public static ObjectTree from(InputStream input, Class<ObjectSource> source) {
+    public static ObjectTree from(InputStream input, Class<? extends ObjectSource> source) {
         ObjectSource objectSource;
         try {
             objectSource = source.getDeclaredConstructor().newInstance();

@@ -13,7 +13,7 @@ public class Yaml implements ObjectSource {
 
     @Override
     public Map<String, Object> load(InputStream input) {
-        Yaml yaml = new Yaml();
+        org.yaml.snakeyaml.Yaml yaml = new org.yaml.snakeyaml.Yaml();
         return yaml.load(input);
     }
 }
