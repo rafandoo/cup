@@ -36,12 +36,12 @@ be used by Java developers to perform common tasks more easily and efficiently.
 
 This project is modular. You can include the complete package or just specific modules, depending on your needs:
 
-| Module    | Artifact ID | Description                               |
-|-----------|-------------|-------------------------------------------|
-| core      | cup-core    | General-purpose utilities, logging, enums |
-| http      | cup-http    | HTTP request helpers and URL builder      |
-| objects   | cup-objects | Object serialization, file exporters      |
-| (planned) | cup-files   | File utilities and resource management    |
+| Module    | Artifact ID | Description                            |
+|-----------|-------------|----------------------------------------|
+| core      | cup-core    | General-purpose utilities              |
+| http      | cup-http    | HTTP request helpers and URL builder   |
+| objects   | cup-objects | Object serialization, file exporters   |
+| (planned) | cup-files   | File utilities and resource management |
 
 ### ☁️ How to Add to Your Project
 
@@ -54,16 +54,16 @@ Add the desired module dependency to your `build.gradle`:
 
 ```groovy
 dependencies {
-    implementation 'dev.rafandoo:cup-core:{LAST_VERSION}'
+  implementation 'dev.rafandoo:cup-core:{LAST_VERSION}'
 }
 ```
 
-If you want to include other modules, simply replace `cup-core` with the desired artifact ID:
+To include other modules, use the corresponding artifact ID:
 
 ```groovy
 dependencies {
-    implementation "dev.rafandoo:cup-http:{LATEST_VERSION}"
-    implementation "dev.rafandoo:cup-objects:{LATEST_VERSION}"
+  implementation "dev.rafandoo:cup-http:{LATEST_VERSION}"
+  implementation "dev.rafandoo:cup-objects:{LATEST_VERSION}"
 }
 ```
 
@@ -72,29 +72,31 @@ dependencies {
 Add the dependency to your `pom.xml`:
 
 ```xml
+
 <dependencies>
-    <dependency>
-        <groupId>dev.rafandoo</groupId>
-        <artifactId>cup-core</artifactId>
-        <version>{LAST_VERSION}</version>
-    </dependency>
+  <dependency>
+    <groupId>dev.rafandoo</groupId>
+    <artifactId>cup-core</artifactId>
+    <version>{LAST_VERSION}</version>
+  </dependency>
 </dependencies>
 ```
 
 To include other modules, use the corresponding artifact ID:
 
 ```xml
+
 <dependencies>
-    <dependency>
-        <groupId>dev.rafandoo</groupId>
-        <artifactId>cup-http</artifactId>
-        <version>{LATEST_VERSION}</version>
-    </dependency>
-    <dependency>
-        <groupId>dev.rafandoo</groupId>
-        <artifactId>cup-objects</artifactId>
-        <version>{LATEST_VERSION}</version>
-    </dependency>
+  <dependency>
+    <groupId>dev.rafandoo</groupId>
+    <artifactId>cup-http</artifactId>
+    <version>{LATEST_VERSION}</version>
+  </dependency>
+  <dependency>
+    <groupId>dev.rafandoo</groupId>
+    <artifactId>cup-objects</artifactId>
+    <version>{LATEST_VERSION}</version>
+  </dependency>
 </dependencies>
 ```
 
@@ -113,17 +115,17 @@ cd cup
 
 ✔️ General utilities.
 
-✔️ Environment utilities.
+✔️ HTTP request helpers and URL builder.
 
-✔️ Logger manager.
+✔️ Object inspection and reflection helpers.
 
-✔️ HTTP class for requests.
+✔️ Dynamic class and interface discovery.
 
-✔️ Object serialization and export in different file formats.
+✔️ Object export support (JSON, XML, CSV).
 
-✔️ Unique identifier generator.
+✔️ File and path handling utilities.
 
-✔️ Enum utilities.
+✔️ String validation helpers.
 
 ## 🚀 Future enhancements
 
