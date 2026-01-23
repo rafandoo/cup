@@ -1,0 +1,14 @@
+:root {
+    --dokka-logo-image-url: url('../images/cup.svg');
+    --dokka-logo-height: 125px;
+    --dokka-logo-width: 95px;
+}
+
+.library-name--link {
+    font-size: 0;
+}
+
+.library-name--link::before {
+    background-position: left;
+    width: var(--dokka-logo-width);
+}
