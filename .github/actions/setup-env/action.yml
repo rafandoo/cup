@@ -19,13 +19,13 @@ runs:
   using: composite
   steps:
     - name: ☕ Set Up Java ${{ inputs.java-version }} (${{ inputs.distribution }})
-      uses: actions/setup-java@v5
+      uses: actions/setup-java@v5.5.0
       with:
         java-version: ${{ inputs.java-version }}
         distribution: ${{ inputs.distribution }}
 
     - name: Configure Gradle and Build Scan
-      uses: gradle/actions/setup-gradle@v5
+      uses: gradle/actions/setup-gradle@v6.2.0
       with:
         build-scan-publish: ${{ inputs.publish-scan }}
         build-scan-terms-of-use-url: 'https://gradle.com/terms-of-service'
