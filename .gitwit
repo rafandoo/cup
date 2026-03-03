@@ -22,6 +22,7 @@ types:
     🔥: "Removing code or files"
     🔒: "Security-related changes"
     🌐: "Internationalization or localization"
+    🔖: "Release-related changes (e.g. version bumps, changelog updates)"
 
 scope:
   description: "Specify the scope of the change (e.g. component or module)"
@@ -50,8 +51,11 @@ changelog:
   showOtherTypes: true
   showBreakingChanges: true
   ignored:
+  ignored:
     - 🧹
     - 👷
+    - 🔖
+    - Merge
   format:
     sectionTemplate: "{scope}: {description} ({shortHash})"
     breakingChangesTemplate: "{type} ({scope})!: {description} ({shortHash})"
