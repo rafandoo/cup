@@ -7,5 +7,5 @@ dependencies {
 
     implementation 'org.json:json:20251224'
     implementation 'org.yaml:snakeyaml:2.6'
-    implementation 'net.vieiro:toml-java:13.4.2'
+    implementation 'net.vieiro:toml-java:13.5.1'
 }
