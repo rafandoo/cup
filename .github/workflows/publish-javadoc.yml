@@ -29,7 +29,7 @@ jobs:
           ./gradlew clean aggregateJavadoc
 
       - name: Upload Javadoc
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@v5
         with:
           path: 'build/docs/javadoc'
 
