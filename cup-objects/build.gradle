@@ -5,7 +5,7 @@ dependencies {
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.21.3'
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.21.3'
 
-    implementation 'org.json:json:20251224'
+    implementation 'org.json:json:20260522'
     implementation 'org.yaml:snakeyaml:2.6'
     implementation 'net.vieiro:toml-java:13.5.1'
 }
