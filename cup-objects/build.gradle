@@ -1,7 +1,11 @@
+plugins {
+    id 'java-library'
+}
+
 dependencies {
     implementation project(":cup-core")
 
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.22.1'
+    api 'com.fasterxml.jackson.core:jackson-databind:2.22.1'
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.21.3'
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.21.3'
 

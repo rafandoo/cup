@@ -138,10 +138,10 @@ subprojects {
         }
     }
 
-    mavenPublishing {
-        publishToMavenCentral()
-        signAllPublications()
-    }
+//    mavenPublishing {
+//        publishToMavenCentral()
+//        signAllPublications()
+//    }
 }
 
 tasks.register('fatJar', Jar) {

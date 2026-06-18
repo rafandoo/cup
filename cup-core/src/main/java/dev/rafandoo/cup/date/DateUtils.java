@@ -1,7 +1,6 @@
 package dev.rafandoo.cup.date;
 
 import lombok.experimental.UtilityClass;
-import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -16,7 +15,6 @@ import java.util.Date;
  * This class is based on the {@code java.time} API and offers
  * compatibility helpers for legacy {@link Date} usage.
  */
-@Slf4j
 @UtilityClass
 public final class DateUtils {
 
