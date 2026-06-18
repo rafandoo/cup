@@ -315,15 +315,10 @@ public class HttpRequester {
      * @throws IOException if an I/O error occurs during the request.
      */
     private HttpResponse execute(HttpMethod method) throws IOException {
-        try {
-            this.method = method;
-            this.prepareRequest();
-            int status = conn.getResponseCode();
-            InputStream is = status >= 400 ? conn.getErrorStream() : conn.getInputStream();
-            return new HttpResponse(status, is, conn.getHeaderFields(), conn.getContentLength());
-        } finally {
-            conn.disconnect();
-        }
+        this.method = method;
+        this.prepareRequest();
+
+        return new HttpResponse(this.conn);
     }
 
     /**
