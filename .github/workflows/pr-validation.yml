@@ -1,4 +1,4 @@
-name: Validate Pull Request
+name: Pull Request Validation
 
 on:
   pull_request:
@@ -10,13 +10,13 @@ permissions:
   pull-requests: read
 
 jobs:
-  validate-backend:
+  build-test:
     name: Build & Test Backend
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Source Code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7.0.0
 
       - name: Set Up Build Environment
         uses: ./.github/actions/setup-env

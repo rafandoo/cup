@@ -1,0 +1,23 @@
+name: Commit Message Validation
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  commit-lint:
+    name: GitWit Lint
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v7.0.0
+        with:
+          fetch-depth: 0
+
+      - name: Run GitWit Lint
+        uses: rafandoo/gitwit-action@v1.1.0
+        with:
+          command: lint
