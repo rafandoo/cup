@@ -6,9 +6,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
+import java.net.HttpURLConnection;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Represents an HTTP response returned from an {@link HttpRequester}.
@@ -18,7 +19,9 @@ import java.util.Map;
  * </p>
  */
 @Getter
-public class HttpResponse {
+public class HttpResponse implements AutoCloseable {
+
+    private final HttpURLConnection connection;
 
     private final int statusCode;
     private final InputStream body;
@@ -32,28 +35,26 @@ public class HttpResponse {
     /**
      * Constructs a new HttpResponse object.
      *
-     * @param statusCode    the HTTP status code.
-     * @param body          InputStream of the response body.
-     * @param headers       the response headers.
-     * @param contentLength length of the body if known, otherwise -1.
+     * @param conn the {@link HttpURLConnection} from which to extract the response details.
      */
-    public HttpResponse(int statusCode, InputStream body, Map<String, java.util.List<String>> headers, long contentLength) {
-        this.statusCode = statusCode;
-        this.body = body;
-        this.headers = Map.copyOf(headers);
+    public HttpResponse(HttpURLConnection conn) throws IOException {
+        this.connection = conn;
+        this.statusCode = conn.getResponseCode();
+        this.body = this.statusCode >= 400 ? conn.getErrorStream() : conn.getInputStream();
+        this.headers = conn.getHeaderFields()
+            .entrySet()
+            .stream()
+            .filter(entry -> entry.getKey() != null)
+            .collect(Collectors.toUnmodifiableMap(
+                Map.Entry::getKey,
+                Map.Entry::getValue
+            ));
 
-        this.contentType = headers.getOrDefault("Content-Type", java.util.List.of("")).stream().findFirst().orElse("");
-        this.contentLength = contentLength;
+        this.contentType = headers.getOrDefault("Content-Type", List.of("")).stream().findFirst().orElse("");
+        this.contentLength = conn.getContentLength();
         this.isSuccessful = statusCode >= 200 && statusCode < 300;
 
-        this.cookies = new HashMap<>();
-        if (headers.containsKey("Set-Cookie")) {
-            for (String cookie : headers.get("Set-Cookie")) {
-                String[] parts = cookie.split(";", 2);
-                String[] keyValue = parts[0].split("=", 2);
-                if (keyValue.length == 2) this.cookies.put(keyValue[0].trim(), keyValue[1].trim());
-            }
-        }
+        this.cookies = CookieParser.parse(headers);
     }
 
     /**
@@ -105,6 +106,31 @@ public class HttpResponse {
      * @return the header value, or null if not present
      */
     public String getHeader(String name) {
-        return this.headers.getOrDefault(name, List.of("")).stream().findFirst().orElse(null);
+        return this.headers.getOrDefault(name, List.of(""))
+            .stream()
+            .findFirst()
+            .orElse(null);
+    }
+
+    /**
+     * Checks if the response status code indicates a non-successful response (4xx or 5xx).
+     *
+     * @return {@code true} if the response is not successful, {@code false} otherwise
+     */
+    public boolean isNotSuccessful() {
+        return !this.isSuccessful;
+    }
+
+    @Override
+    public void close() {
+        try {
+            if (this.body != null) {
+                this.body.close();
+            }
+        } catch (IOException ignored) {
+        }
+        if (this.connection != null) {
+            this.connection.disconnect();
+        }
     }
 }

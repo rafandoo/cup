@@ -6,7 +6,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -17,7 +19,7 @@ import java.util.Map;
  *
  * String url = UrlBuilder.builder()
  *     .protocol("https")
- *     .url("api.example.com")
+ *     .host("api.example.com")
  *     .port(8080)
  *     .path("v1/users")
  *     .addParameter("page", "2")
@@ -30,23 +32,17 @@ import java.util.Map;
  */
 public class UrlBuilder {
 
-    private final StringBuilder urlBuilder;
-    private final Map<String, Object> params;
-    private String protocol;
-    private String url;
-    private int port;
-    private String path;
+    private String scheme;
+    private String host;
+    private Integer port;
+    private final List<String> pathSegments = new ArrayList<>();
+    private final Map<String, List<String>> queryParams = new LinkedHashMap<>();
     private String fragment;
-
-    private boolean built;
 
     /**
      * Private constructor to enforce the use of the static builder() method.
      */
     private UrlBuilder() {
-        this.urlBuilder = new StringBuilder();
-        this.params = new LinkedHashMap<>();
-        this.built = false;
     }
 
     /**
@@ -61,24 +57,40 @@ public class UrlBuilder {
     /**
      * Defines the protocol (scheme) of the URL, e.g., "http" or "https".
      *
-     * @param protocol the protocol to use.
+     * @param scheme the protocol to use.
      * @return the current builder instance.
      */
-    public UrlBuilder protocol(String protocol) {
-        this.ensureNotBuilt();
-        this.protocol = protocol;
+    public UrlBuilder protocol(String scheme) {
+        this.scheme = scheme;
         return this;
     }
 
     /**
-     * Defines the host or base URL.
+     * Shortcut method to set the protocol to "http".
      *
-     * @param url the host or base URL.
      * @return the current builder instance.
      */
-    public UrlBuilder url(String url) {
-        this.ensureNotBuilt();
-        this.url = url;
+    public UrlBuilder http() {
+        return this.protocol("http");
+    }
+
+    /**
+     * Shortcut method to set the protocol to "https".
+     *
+     * @return the current builder instance.
+     */
+    public UrlBuilder https() {
+        return this.protocol("https");
+    }
+
+    /**
+     * Defines the host (domain) of the URL.
+     *
+     * @param host the host to use.
+     * @return the current builder instance.
+     */
+    public UrlBuilder host(String host) {
+        this.host = host;
         return this;
     }
 
@@ -89,35 +101,66 @@ public class UrlBuilder {
      * @return the current builder instance.
      */
     public UrlBuilder port(int port) {
-        this.ensureNotBuilt();
+        if (port <= 0 || port > 65535) {
+            throw new IllegalArgumentException("Invalid port: " + port + ". Port number must be between 1 and 65535");
+        }
         this.port = port;
         return this;
     }
 
     /**
-     * Defines the path (endpoint) to append to the URL.
+     * Defines the path (endpoint) to append to the URL using multiple segments.
      *
-     * @param path the path to append.
+     * @param segments the path segments to join and append.
      * @return the current builder instance.
      */
-    public UrlBuilder path(String path) {
-        this.ensureNotBuilt();
-        this.path = path;
+    public UrlBuilder path(String... segments) {
+        if (segments == null) {
+            return this;
+        }
+        for (String segment : segments) {
+            this.addPathSegment(segment);
+        }
+
         return this;
     }
 
     /**
-     * Adds multiple query parameters.
+     * Adds an additional path segment to the existing path.
      *
-     * @param params map of key-value query parameters.
+     * @param segment the path segment to add.
      * @return the current builder instance.
      */
-    public UrlBuilder addParameters(Map<String, Object> params) {
-        this.ensureNotBuilt();
-        if (params != null) {
-            this.params.putAll(params);
+    public UrlBuilder addPathSegment(String segment) {
+        if (StringValidator.isNullOrEmpty(segment)) {
+            return this;
         }
+
+        String cleaned = this.trimSlashes(segment);
+        if (!cleaned.isEmpty()) {
+            this.pathSegments.add(cleaned);
+        }
+
         return this;
+    }
+
+    /**
+     * Trims leading and trailing slashes from a path segment.
+     *
+     * @param value the path segment to clean.
+     * @return the cleaned path segment without leading or trailing slashes.
+     */
+    private String trimSlashes(String value) {
+        int start = 0;
+        int end = value.length();
+
+        while (start < end && value.charAt(start) == '/') {
+            start++;
+        }
+        while (end > start && value.charAt(end - 1) == '/') {
+            end--;
+        }
+        return value.substring(start, end);
     }
 
     /**
@@ -128,10 +171,37 @@ public class UrlBuilder {
      * @return the current builder instance.
      */
     public UrlBuilder addParameter(String key, Object value) {
-        this.ensureNotBuilt();
-        if (!StringValidator.isNullOrEmpty(key) && value != null && !StringValidator.isNullOrEmpty(value.toString())) {
-            this.params.put(key, value);
+        if (StringValidator.isNullOrEmpty(key) || value == null) {
+            return this;
         }
+
+        this.queryParams.computeIfAbsent(key, k -> new ArrayList<>())
+            .add(String.valueOf(value));
+
+        return this;
+    }
+
+    /**
+     * Adds multiple query parameters from a map.
+     *
+     * @param params a map of parameter names and values (null values are ignored).
+     * @return the current builder instance.
+     */
+    public UrlBuilder addParameters(Map<String, ?> params) {
+        if (params == null) {
+            return this;
+        }
+        params.forEach(this::addParameter);
+        return this;
+    }
+
+    /**
+     * Clears all query parameters from the builder.
+     *
+     * @return the current builder instance.
+     */
+    public UrlBuilder clearParameters() {
+        this.queryParams.clear();
         return this;
     }
 
@@ -142,113 +212,79 @@ public class UrlBuilder {
      * @return the current builder instance.
      */
     public UrlBuilder fragment(String fragment) {
-        this.ensureNotBuilt();
         this.fragment = fragment;
         return this;
     }
 
     /**
-     * Builds the final URL if not built yet.
+     * Encodes a query parameter value using UTF-8 encoding.
      *
-     * @return the current builder instance with the built URL.
+     * @param value the value to encode.
+     * @return the URL-encoded value.
      */
-    private UrlBuilder build() {
-        if (this.built) return this;
-
-        this.appendProtocolIfNecessary();
-        this.appendUrl();
-        this.appendPortIfNecessary();
-        this.appendPath();
-        this.appendParameters();
-        this.appendFragment();
-
-        this.built = true;
-        return this;
+    private String encodeQuery(String value) {
+        return URLEncoder.encode(value, StandardCharsets.UTF_8);
     }
 
     /**
-     * Appends the protocol to the URL if it's defined and not already present in the URL.
+     * Builds the path string by joining all path segments with slashes.
+     *
+     * @return the complete path string, or null if no segments are defined.
      */
-    private void appendProtocolIfNecessary() {
-        if (!StringValidator.isNullOrEmpty(this.protocol)
-            && (this.url == null || !this.url.contains("://"))) {
-            this.urlBuilder.append(this.protocol).append("://");
+    private String buildPath() {
+        if (this.pathSegments.isEmpty()) {
+            return null;
         }
+        return "/" + String.join("/", this.pathSegments);
     }
 
     /**
-     * Appends the main URL (host/domain) if defined.
+     * Builds the query string by encoding all parameters and joining them with '&'.
+     *
+     * @return the complete query string, or null if no parameters are defined.
      */
-    private void appendUrl() {
-        if (!StringValidator.isNullOrEmpty(this.url)) {
-            this.urlBuilder.append(this.url.replaceAll("/+$", ""));
+    private String buildQuery() {
+        if (this.queryParams.isEmpty()) {
+            return null;
         }
-    }
 
-    /**
-     * Appends the port to the URL if it is greater than 0 and not already included.
-     */
-    private void appendPortIfNecessary() {
-        if (this.port > 0 && (this.url == null || !this.url.contains(":"))) {
-            this.urlBuilder.append(":").append(this.port);
-        }
-    }
+        StringBuilder query = new StringBuilder();
 
-    /**
-     * Appends the path to the URL, ensuring that slashes are correctly positioned.
-     */
-    private void appendPath() {
-        if (!StringValidator.isNullOrEmpty(this.path)) {
-            boolean needsSlash = !this.path.startsWith("/") && !this.urlBuilder.isEmpty()
-                && this.urlBuilder.charAt(this.urlBuilder.length() - 1) != '/';
-            if (needsSlash) {
-                this.urlBuilder.append("/");
+        boolean first = true;
+        for (Map.Entry<String, List<String>> entry : this.queryParams.entrySet()) {
+            String key = this.encodeQuery(entry.getKey());
+            for (String value : entry.getValue()) {
+                if (!first) {
+                    query.append("&");
+                } else {
+                    first = false;
+                }
+                query.append(key).append("=").append(encodeQuery(value));
             }
-            this.urlBuilder.append(this.path.replaceAll("^/+", ""));
         }
+        return query.toString();
     }
 
     /**
-     * Appends query parameters to the URL in the format <code>?key=value&key2=value2...</code>.
-     * Each key and value is URL-encoded using UTF-8.
-     */
-    private void appendParameters() {
-        if (this.params.isEmpty()) return;
-
-        if (this.urlBuilder.indexOf("?") == -1) {
-            this.urlBuilder.append("?");
-        } else if (!this.urlBuilder.toString().endsWith("?") && !this.urlBuilder.toString().endsWith("&")) {
-            this.urlBuilder.append("&");
-        }
-
-        boolean first = this.urlBuilder.charAt(this.urlBuilder.length() - 1) == '?';
-        for (var entry : this.params.entrySet()) {
-            if (!first) this.urlBuilder.append("&");
-            else first = false;
-
-            String key = URLEncoder.encode(entry.getKey(), StandardCharsets.UTF_8);
-            String value = URLEncoder.encode(String.valueOf(entry.getValue()), StandardCharsets.UTF_8);
-            this.urlBuilder.append(key).append("=").append(value);
-        }
-    }
-
-    /**
-     * Appends the fragment identifier to the URL if defined.
-     */
-    private void appendFragment() {
-        if (!StringValidator.isNullOrEmpty(this.fragment)) {
-            this.urlBuilder.append("#").append(URLEncoder.encode(this.fragment, StandardCharsets.UTF_8));
-        }
-    }
-
-    /**
-     * Ensures that the URL has not been built yet.
+     * Builds and returns the URL as a {@link URI} object.
      *
-     * @throws IllegalStateException if the URL has already been built.
+     * @return the complete URL as a URI.
+     * @throws IllegalStateException if the URI cannot be constructed from the provided components.
      */
-    private void ensureNotBuilt() {
-        if (this.built)
-            throw new IllegalStateException("UrlBuilder cannot be modified after build()");
+    public URI toURI() {
+        try {
+            return new URI(
+                this.scheme,
+                null,
+                this.host,
+                this.port == null ? -1 : this.port,
+                this.buildPath(),
+                this.buildQuery(),
+                this.fragment
+            );
+        } catch (URISyntaxException e) {
+            throw new IllegalStateException("Failed to build URI from the provided components", e);
+        }
     }
 
     /**
@@ -258,18 +294,6 @@ public class UrlBuilder {
      */
     @Override
     public String toString() {
-        this.build();
-        return this.urlBuilder.toString();
-    }
-
-    /**
-     * Builds and returns the URL as a {@link URI}.
-     *
-     * @return the complete URL as a URI.
-     * @throws URISyntaxException if the resulting URL is invalid.
-     */
-    public URI toURI() throws URISyntaxException {
-        this.build();
-        return new URI(this.urlBuilder.toString());
+        return this.toURI().toString();
     }
 }
