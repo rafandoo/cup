@@ -51,7 +51,6 @@ changelog:
   showOtherTypes: true
   showBreakingChanges: true
   ignored:
-  ignored:
     - 🧹
     - 👷
     - 🔖

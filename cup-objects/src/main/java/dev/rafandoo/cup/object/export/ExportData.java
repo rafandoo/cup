@@ -3,7 +3,6 @@ package dev.rafandoo.cup.object.export;
 import dev.rafandoo.cup.exception.ExportException;
 import dev.rafandoo.cup.object.export.strategy.ExportStrategy;
 import dev.rafandoo.cup.text.StringValidator;
-import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -13,7 +12,6 @@ import java.util.Objects;
 /**
  * Handles exporting objects using a configurable {@link ExportStrategy}.
  */
-@Slf4j
 public class ExportData {
 
     private final ExportStrategy strategy;
@@ -34,18 +32,37 @@ public class ExportData {
     }
 
     /**
-     * Instantiates the given {@link ExportStrategy} class.
+     * Creates an exporter for the given {@link ExportStrategy}.
      *
-     * @param strategy the export strategy class to instantiate.
-     * @return a new instance of the specified export strategy.
-     * @throws ExportException if instantiation fails.
+     * @param strategy the export strategy to use.
+     * @return a configured {@code ExportData} instance.
      */
-    private static ExportStrategy instantiateStrategy(Class<? extends ExportStrategy> strategy) {
-        try {
-            return strategy.getDeclaredConstructor().newInstance();
-        } catch (Exception e) {
-            throw new ExportException("Failed to instantiate export strategy", e);
-        }
+    public static ExportData of(ExportStrategy strategy) {
+        return new ExportData(strategy, null, null);
+    }
+
+    /**
+     * Creates an exporter for the given {@link ExportStrategy} and filename.
+     *
+     * @param strategy the export strategy to use.
+     * @param filename the output filename (extension optional).
+     * @return a configured {@code ExportData} instance.
+     */
+    public static ExportData of(ExportStrategy strategy, String filename) {
+        return new ExportData(strategy, filename, null);
+    }
+
+    /**
+     * Creates an exporter for the given {@link ExportStrategy}, filename and directory.
+     *
+     * @param strategy  the export strategy to use.
+     * @param filename  the output filename (extension optional).
+     * @param directory the output directory path.
+     * @return a fully configured {@code ExportData} instance.
+     */
+    public static ExportData of(ExportStrategy strategy, String filename, String directory) {
+        Path dir = directory == null ? null : Paths.get(directory);
+        return new ExportData(strategy, filename, dir);
     }
 
     /**
@@ -80,6 +97,21 @@ public class ExportData {
     public static ExportData of(Class<? extends ExportStrategy> strategy, String filename, String directory) {
         Path dir = directory == null ? null : Paths.get(directory);
         return new ExportData(instantiateStrategy(strategy), filename, dir);
+    }
+
+    /**
+     * Instantiates the given {@link ExportStrategy} class.
+     *
+     * @param strategy the export strategy class to instantiate.
+     * @return a new instance of the specified export strategy.
+     * @throws ExportException if instantiation fails.
+     */
+    private static ExportStrategy instantiateStrategy(Class<? extends ExportStrategy> strategy) {
+        try {
+            return strategy.getDeclaredConstructor().newInstance();
+        } catch (Exception e) {
+            throw new ExportException("Failed to instantiate export strategy", e);
+        }
     }
 
     /**

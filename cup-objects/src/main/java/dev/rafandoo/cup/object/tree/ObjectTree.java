@@ -1,7 +1,9 @@
 package dev.rafandoo.cup.object.tree;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dev.rafandoo.cup.JacksonMapperFactory;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -13,11 +15,11 @@ import java.util.Optional;
  */
 public class ObjectTree {
 
-    private final Map<String, Object> data;
+    @Getter
+    private final Map<String, Object> data = new LinkedHashMap<>();
 
-    private static final ObjectMapper MAPPER = new ObjectMapper()
-        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-        .configure(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES, false);
+    @Setter
+    private ObjectMapper mapper;
 
     /**
      * Creates a new {@code ObjectTree} backed by the provided hierarchical data.
@@ -25,7 +27,6 @@ public class ObjectTree {
      * @param data a map representing the root of the parsed document.
      */
     public ObjectTree(Map<String, Object> data) {
-        this.data = new LinkedHashMap<>();
         this.data.putAll(data);
     }
 
@@ -51,28 +52,17 @@ public class ObjectTree {
     }
 
     /**
-     * Configures a single {@link DeserializationFeature} on the internal
-     * {@link ObjectMapper} used for object conversion.
+     * Retrieves the underlying {@link ObjectMapper} used for type conversions.
      * <p>
-     * This affects all subsequent {@code as(...)} conversion operations.
+     * If no mapper has been explicitly set, a default mapper is created and returned.
      *
-     * @param feature the deserialization feature to configure.
-     * @param state   the boolean state to set for the feature.
+     * @return the {@link ObjectMapper} instance for this tree.
      */
-    public void configureMapper(DeserializationFeature feature, boolean state) {
-        MAPPER.configure(feature, state);
-    }
-
-    /**
-     * Configures multiple {@link DeserializationFeature}s on the internal
-     * {@link ObjectMapper} used for object conversion.
-     * <p>
-     * This affects all subsequent {@code as(...)} conversion operations.
-     *
-     * @param features a map of deserialization features and their desired states.
-     */
-    public void configureMapper(Map<DeserializationFeature, Boolean> features) {
-        features.forEach(MAPPER::configure);
+    private ObjectMapper getMapper() {
+        if (this.mapper == null) {
+            this.mapper = JacksonMapperFactory.defaultMapper();
+        }
+        return this.mapper;
     }
 
     /**
@@ -83,7 +73,7 @@ public class ObjectTree {
      * @throws IllegalArgumentException if the conversion fails.
      */
     public <T> T as(Class<T> clazz) {
-        return MAPPER.convertValue(this.data, clazz);
+        return this.getMapper().convertValue(this.data, clazz);
     }
 
     /**
@@ -96,7 +86,7 @@ public class ObjectTree {
      * @throws IllegalArgumentException if the conversion fails.
      */
     public <T> T as(Class<T> clazz, String key) {
-        return MAPPER.convertValue(this.get(key), clazz);
+        return this.getMapper().convertValue(this.get(key), clazz);
     }
 
     /**

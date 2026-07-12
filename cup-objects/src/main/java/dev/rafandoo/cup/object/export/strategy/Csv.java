@@ -1,12 +1,12 @@
 package dev.rafandoo.cup.object.export.strategy;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
-import lombok.NoArgsConstructor;
+import dev.rafandoo.cup.JacksonMapperFactory;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
-import java.io.FileWriter;
 
 /**
  * {@link ExportStrategy} implementation for exporting objects in CSV format.
@@ -14,8 +14,22 @@ import java.io.FileWriter;
  * @see ExportStrategy
  */
 @Slf4j
-@NoArgsConstructor
-public class Csv implements ExportStrategy {
+public class Csv implements JacksonExportStrategy {
+
+    private final CsvMapper mapper;
+
+    public Csv() {
+        this(JacksonMapperFactory.csv());
+    }
+
+    public Csv(CsvMapper mapper) {
+        this.mapper = mapper;
+    }
+
+    @Override
+    public ObjectMapper getMapper() {
+        return this.mapper;
+    }
 
     @Override
     public String getExtension() {
@@ -29,9 +43,8 @@ public class Csv implements ExportStrategy {
 
     @Override
     public String export(Object object) {
-        CsvMapper mapper = new CsvMapper();
         try {
-            return mapper.writeValueAsString(object);
+            return this.getMapper().writeValueAsString(object);
         } catch (JsonProcessingException e) {
             log.error("Error exporting object to CSV. Error: {}", e.getMessage());
             return null;
@@ -41,10 +54,7 @@ public class Csv implements ExportStrategy {
     @Override
     public void export(Object object, File file) {
         try {
-            String csv = this.export(object);
-            FileWriter writer = new FileWriter(file, false);
-            writer.write(csv);
-            writer.close();
+            this.getMapper().writeValue(file, object);
         } catch (Exception e) {
             log.error("Error exporting object to CSV file. Error: {}", e.getMessage());
         }

@@ -1,12 +1,12 @@
 package dev.rafandoo.cup.object.export.strategy;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import lombok.NoArgsConstructor;
+import dev.rafandoo.cup.JacksonMapperFactory;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
-import java.io.FileWriter;
 
 /**
  * {@link ExportStrategy} implementation for exporting objects in XML format.
@@ -14,8 +14,22 @@ import java.io.FileWriter;
  * @see ExportStrategy
  */
 @Slf4j
-@NoArgsConstructor
-public class Xml implements ExportStrategy {
+public class Xml implements JacksonExportStrategy {
+
+    private final XmlMapper mapper;
+
+    public Xml() {
+        this(JacksonMapperFactory.xml());
+    }
+
+    public Xml (XmlMapper mapper) {
+        this.mapper = mapper;
+    }
+
+    @Override
+    public ObjectMapper getMapper() {
+        return this.mapper;
+    }
 
     @Override
     public String getExtension() {
@@ -29,9 +43,8 @@ public class Xml implements ExportStrategy {
 
     @Override
     public String export(Object object) {
-        XmlMapper mapper = new XmlMapper();
         try {
-            return mapper.writeValueAsString(object);
+            return this.getMapper().writeValueAsString(object);
         } catch (JsonProcessingException e) {
             log.error("Error exporting object to XML. Error: {}", e.getMessage());
             return null;
@@ -41,10 +54,7 @@ public class Xml implements ExportStrategy {
     @Override
     public void export(Object object, File file) {
         try {
-            String xml = this.export(object);
-            FileWriter writer = new FileWriter(file, false);
-            writer.write(xml);
-            writer.close();
+            this.getMapper().writeValue(file, object);
         } catch (Exception e) {
             log.error("Error exporting object to XML file. Error: {}", e.getMessage());
         }
