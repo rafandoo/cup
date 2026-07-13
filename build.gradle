@@ -75,7 +75,7 @@ allprojects {
     }
 
     dependencies {
-        dokkaPlugin 'org.jetbrains.dokka:kotlin-as-java-plugin:2.1.0'
+        dokkaPlugin 'org.jetbrains.dokka:kotlin-as-java-plugin:2.2.0'
     }
 
     dokka {
