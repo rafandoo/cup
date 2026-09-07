@@ -115,11 +115,11 @@ subprojects {
     dependencies {
         compileOnly 'org.slf4j:slf4j-api:2.0.18'
 
-        compileOnly 'org.projectlombok:lombok:1.18.46'
-        annotationProcessor 'org.projectlombok:lombok:1.18.46'
+        compileOnly 'org.projectlombok:lombok:1.18.48'
+        annotationProcessor 'org.projectlombok:lombok:1.18.48'
 
-        testCompileOnly 'org.projectlombok:lombok:1.18.46'
-        testAnnotationProcessor 'org.projectlombok:lombok:1.18.46'
+        testCompileOnly 'org.projectlombok:lombok:1.18.48'
+        testAnnotationProcessor 'org.projectlombok:lombok:1.18.48'
     }
 
     tasks.withType(Jar).configureEach {
